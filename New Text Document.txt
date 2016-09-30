@@ -1,7 +1,0 @@
-some txt
-
-<<<<<<< HEAD
-agiufgdsiufhs
-=======
-Another txt
->>>>>>> origin/master
