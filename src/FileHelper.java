@@ -20,7 +20,8 @@ public class FileHelper {
                 if (line.startsWith("*PAGE:")) {
                     // new entry starts
                     // save the old one
-                    if (url != null) {
+                    // if checks if url, title and wordList are set
+                    if ((url != null)&&(title!=null)&&(wordList!=null)) {
                         result.add(new Website(url, title, wordList));
                     }
                     title = null;
@@ -35,7 +36,8 @@ public class FileHelper {
                     wordList.add(line);
                 }
             }
-            if (url != null) {
+            // if checks if url, title and wordList are set
+            if ((url != null)&&(title!=null)&&(wordList!=null)) {
                 result.add(new Website(url, title, wordList));
             }
         } catch (FileNotFoundException e) {
