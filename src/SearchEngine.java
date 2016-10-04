@@ -15,29 +15,33 @@ public class SearchEngine {
         }
         List<Website> list = FileHelper.parseFile(args[0]);
 
-        System.out.println("Please enter a word");
+        System.out.println("Please enter a word. Entering \"quit\" will stop the program");
 
         Scanner sc = new Scanner(System.in);
         while (sc.hasNext()) {
             String line = sc.next();
-            // in case line arg is 'quit' program terminates
+
+            //in case line arg is 'quit' program terminates
             if (line.equals("quit")) {
                 return;
             }
-            //  Search for line in the list of websites.
-            //  boolean wordsFound tracks if words are found in list
+
+            //Search for the line in the list of websites.
+            //boolean wordsFound tracks if at least one website is found
             boolean wordsFound = false;
+
             for (Website w: list) {
                 if (w.containsWord(line)) {
                     System.out.println("Word found on " + w.getUrl());
-                    // words found, tracker becomes true
+                    //words found, tracker becomes true
                     wordsFound = true;
                 }
             }
-            // if no words are found tracker remains false. Prints message.
-                if (!wordsFound){
-                    System.out.println("No words found!");
-                }
+
+            //if wordsFound is false, then there were no results during the search
+            if (!wordsFound){
+                System.out.println("No words found!");
+            }
         }
 
     }
