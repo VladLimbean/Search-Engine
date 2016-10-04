@@ -8,25 +8,25 @@ import java.util.Scanner;
  * Created by maau on 27/09/16.
  */
 public class FileHelper {
-    public static List<Website> parseFile(String arg) {
-        List<Website> result = new ArrayList<Website>();
-        String url = null;
-        String title = null;
-        List<String> wordList = null;
+                    public static List<Website> parseFile(String arg) {
+                        List<Website> result = new ArrayList<Website>();
+                        String url = null;
+                        String title = null;
+                        List<String> wordList = null;
 
-        try {
-            Scanner sc = new Scanner(new File(arg));
-            while (sc.hasNext()) {
-                String line = sc.next().trim();
-                if (line.startsWith("*PAGE:")) {
-                    //new entry starts
-                    //save the old one
-                    //do not add the website if url, title and wordList are not set
-                    if ((url != null) && (title!=null) && (wordList!=null)) {
-                        result.add(new Website(url, title, wordList));
-                    }
+                        try {
+                            Scanner sc = new Scanner(new File(arg));
+                            while (sc.hasNext()) {
+                                String line = sc.next().trim();
+                                if (line.startsWith("*PAGE:")) {
+                                    //new entry starts
+                                    //save the old one
+                                    //do not add the website if url, title and wordList are not set
+                                    if ((url != null) && (title!=null) && (wordList!=null)) {
+                                        result.add(new Website(url, title, wordList));
+                                    }
 
-                    //Reset the title and word list
+                                    //Reset the title and word list
                     title = null;
                     wordList = null;
                     //Set the url to be equal to this line - the *PAGE: prefix
