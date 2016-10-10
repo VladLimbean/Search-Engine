@@ -13,8 +13,10 @@ public class SearchEngine {
         // creates new object that will read txt file
         TextReader textReader = new TextReader();
         // creates hashmap called index
-        HashMap<String, List<Page>> index = textReader.readTxt(fileName);
+        List<Page> index = FileHelper.parseFile(fileName);
 
+        InvertedIndex hashIndex = new InvertedIndex();
+        hashIndex.build(index);
         System.out.println("Welcome to the search engine. Please type a word");
         // awaits command line input from user
         Scanner sc = new Scanner(System.in);
@@ -25,16 +27,17 @@ public class SearchEngine {
             if (userInput.equals("quit")){
                 return;
             }
-            // prints key words and related urls
-            if(index.containsKey(userInput) ) {
-                List<Page> resultsFound = index.get(userInput);
+
+            List<Page> resultsFound = hashIndex.lookup(userInput);
+
+            if (resultsFound.size() == 0){
+             System.out.println("No results found for user input " + userInput);
+            }
+            else {
                 for(Page s : resultsFound) {
                     System.out.println(s.getTitle() + " " + s.getUrl());
                 }
             }
-            // prints message if no results are found
-            else {
-             System.out.println("No results found for user input " + userInput);}
         }
     }
 }

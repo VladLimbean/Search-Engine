@@ -9,6 +9,9 @@ import java.util.Scanner;
 
 /**
  * Created by Vlad on 05/10/2016.
+ * This class reads an input file and creats a hashmap.
+ *
+ * @author Vlad Limbean
  */
 public class TextReader {
     String url;
@@ -21,7 +24,7 @@ public class TextReader {
             Scanner sc = new Scanner(new File(fileName));
 
             map = new HashMap<String, List<Page>>();
-            //goes thourgh every line of text in the input file
+            //goes through every line of text in the input file
             while (sc.hasNext()) {
                 // checks next line
                 String currentLine = sc.next();
@@ -52,7 +55,7 @@ public class TextReader {
                         }
                         // if not already added, it will add it to the hash map
                         if(!isWebsiteAlreadyAdded) {
-                            Page currentPage = new Page(this.url, this.title);
+                            Page currentPage = new Page(this.url, this.title, new ArrayList<>());
                             currentList.add(currentPage);
                             map.put(currentLine, currentList);
                         }
@@ -60,7 +63,7 @@ public class TextReader {
                     // if word is not featured in hashmap already it will now add it
                     else {
                         List<Page> newList = new ArrayList<Page>();
-                        Page newPage = new Page(this.url, this.title);
+                        Page newPage = new Page(this.url, this.title, new ArrayList<>());
                         newList.add(newPage);
                         map.put(currentLine, newList);
                     }
