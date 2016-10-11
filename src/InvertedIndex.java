@@ -23,8 +23,10 @@ public class InvertedIndex implements Index {
                 else {
                     emptyList = new ArrayList<Page>();
                 }
-
+                if (!emptyList.contains(page)){
                 emptyList.add(page);
+                }
+
                 mainMap.put(keyWord, emptyList);
             }
         }

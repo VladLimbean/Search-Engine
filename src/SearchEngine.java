@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
+import java.util.TreeMap;
 
 /**
  * Created by Joso on 05.10.2016.
@@ -18,11 +19,14 @@ public class SearchEngine {
         //defines input file
         String fileName = args[0];
         // creates hashmap called index
+
         List<Page> index = FileHelper.parseFile(fileName);
 
         InvertedIndex hashIndex =
                 new InvertedIndex(new HashMap<String, List<Page>>());
+
         hashIndex.build(index);
+
         System.out.println("Welcome to the search engine. Please type a word");
         // awaits command line input from user
         Scanner sc = new Scanner(System.in);
@@ -33,8 +37,10 @@ public class SearchEngine {
             if (userInput.equals("quit")){
                 return;
             }
-
+            long startTime = System.nanoTime();
             List<Page> resultsFound = hashIndex.lookup(userInput);
+            long endTime = System.nanoTime();
+            System.out.println("Time performance: " + (endTime - startTime) + " ms");
 
             if (resultsFound.size() == 0){
              System.out.println("No results found for user input " + userInput);
