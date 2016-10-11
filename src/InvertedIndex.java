@@ -1,34 +1,37 @@
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Vlad on 10/10/2016.
  */
 public class InvertedIndex implements Index {
-    public AbstractMap<String, List<Page>> mainMap;
+    public Map<String, List<Page>> mainMap;
 
-    public void build(List<Page> listPages) {
-        this.mainMap = new HashMap<String, List<Page>>();
+    public InvertedIndex(Map<String, List<Page>> map)
+    {
+        this.mainMap = map;
+    }
 
-        for (Page a : listPages) {
-            for (String b : a.getWords()) {
-                if (mainMap.containsKey(b)) {
-                    List<Page> currentList = mainMap.get(b);
-                    currentList.add(a);
-                    mainMap.put(b, currentList);
-                } else {
-                    List<Page> startingList = new ArrayList<>();
-                    startingList.add(a);
-                    mainMap.put(b, startingList);
+    public void build(List<Page> listPages)
+    {
+        for (Page page : listPages) {
+            for (String keyWord : page.getWords()) {
+                List<Page> emptyList;
+
+                if (mainMap.containsKey(keyWord)) {
+                    emptyList = mainMap.get(keyWord);
                 }
+                else {
+                    emptyList = new ArrayList<Page>();
+                }
+
+                emptyList.add(page);
+                mainMap.put(keyWord, emptyList);
             }
         }
     }
 
-
-    public List<Page> lookup(String key) {
+    public List<Page> lookup(String key)
+    {
         if (mainMap.containsKey(key)) {
             return mainMap.get(key);
         }

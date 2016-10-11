@@ -8,14 +8,20 @@ import java.util.Scanner;
 public class SearchEngine {
 
     public static void main(String[] args) {
+        System.out.println("Welcome to the Search Engine");
+
+        if (args.length != 1) {
+            System.out.println("Error: Please provide a filename <filename>");
+            return;
+        }
+
         //defines input file
-        String fileName = "Data/enwiki-tiny.txt";
-        // creates new object that will read txt file
-        TextReader textReader = new TextReader();
+        String fileName = args[0];
         // creates hashmap called index
         List<Page> index = FileHelper.parseFile(fileName);
 
-        InvertedIndex hashIndex = new InvertedIndex();
+        InvertedIndex hashIndex =
+                new InvertedIndex(new HashMap<String, List<Page>>());
         hashIndex.build(index);
         System.out.println("Welcome to the search engine. Please type a word");
         // awaits command line input from user

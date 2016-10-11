@@ -16,6 +16,7 @@ public class Page {
         this.words = words;
 
     }
+
     public boolean containsWord(String word) {
         return this.words.contains(word);
     }
