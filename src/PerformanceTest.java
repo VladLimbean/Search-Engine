@@ -21,9 +21,7 @@ public class PerformanceTest {
 
         while (n<1000) {
             long startTime = System.nanoTime();
-
             simple.build(list);
-
             long endTime = System.nanoTime() - startTime;
             timeArray[n] = endTime;
             n++;
@@ -107,13 +105,13 @@ public static void runTestSearch(List<Website> list) {
     int i = 0;
     SimpleIndex simple = new SimpleIndex();
     simple.build(list);
-    long startTime = System.nanoTime();
     long[] time = new long[1000];
     long totalTime = 0;
 
 
     while (i < 1000) {
-         List<Website> resultsFound = simple.lookup(keywords);
+        long startTime = System.nanoTime();
+        List<Website> resultsFound = simple.lookup(keywords);
             long endTime = System.nanoTime() - startTime;
             time[i] = endTime;
             totalTime = totalTime + time[i];
@@ -125,14 +123,14 @@ public static void runTestSearch(List<Website> list) {
 
     InvertedIndex invertedIndHash = new InvertedIndex(new HashMap<>());
     invertedIndHash.build(list);
-    long startTimeHash = System.nanoTime();
     long[] timeTree = new long[1000];
     long totalTimeTree = 0;
     i = 0;
 
     while (i < 1000) {
+        long startTime = System.nanoTime();
         List<Website> resultsFoundHash = invertedIndHash.lookup(keywords);
-        long endTime = System.nanoTime() - startTimeHash;
+        long endTime = System.nanoTime() - startTime;
         time[i] = endTime;
         totalTimeTree = totalTimeTree + time[i];
         i++;
@@ -143,7 +141,6 @@ public static void runTestSearch(List<Website> list) {
 
     InvertedIndex invertedIndTree = new InvertedIndex(new TreeMap<>());
     invertedIndTree.build(list);
-    long startTimeTree = System.nanoTime();
     List<Website> resultsFoundTree = simple.lookup(keywords);
      timeTree = new long[1000];
      totalTimeTree = 0;
@@ -151,8 +148,9 @@ public static void runTestSearch(List<Website> list) {
 
 
     while (i < 1000) {
+        long startTime = System.nanoTime();
         resultsFoundTree = invertedIndTree.lookup(keywords);
-        long endTime = System.nanoTime() - startTimeTree;
+        long endTime = System.nanoTime() - startTime;
         time[i] = endTime;
         totalTimeTree = totalTimeTree + time[i];
         i++;
