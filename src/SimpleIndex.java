@@ -35,4 +35,9 @@ public class SimpleIndex implements Index
         //Return the final list of results
         return resultsFound;
     }
+
+    public String toString()
+    {
+        return "SimpleIndex";
+    }
 }

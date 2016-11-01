@@ -62,4 +62,9 @@ public class InvertedIndex implements Index
             return new ArrayList<>();
         }
     }
+
+    public String toString()
+    {
+        return "InvertedIndex with " + this.mainMap.getClass();
+    }
 }
