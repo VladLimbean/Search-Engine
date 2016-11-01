@@ -1,52 +1,62 @@
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
-import java.util.TreeMap;
 
 /**
- * Created by Joso on 05.10.2016.
+ * Main class for our Search Engine. Handles the creation of an index,
+ * searching for user words, and printing the results on the console.
+ * The process happens in the main function.
  */
-public class SearchEngine {
-
-    public static void main(String[] args) {
+public class SearchEngine
+{
+    public static void main(String[] args)
+    {
+        //Print out the welcoming message
         System.out.println("Welcome to the Search Engine");
 
+        //Stop execution if no .txt file was added for FileHelper
         if (args.length != 1) {
             System.out.println("Error: Please provide a filename <filename>");
             return;
         }
 
-        //defines input file
-        String fileName = args[0];
-        // creates hashmap called index
+        //Parse the txt file and create a list of Websites
+        List<Website> index = FileHelper.parseFile(args[0]);
 
-        List<Page> index = FileHelper.parseFile(fileName);
-
+        //Create the InvertedIndex object and build it
         InvertedIndex hashIndex =
-                new InvertedIndex(new HashMap<String, List<Page>>());
-
+                new InvertedIndex(new HashMap<String, List<Website>>());
         hashIndex.build(index);
 
-        System.out.println("Welcome to the search engine. Please type a word");
-        // awaits command line input from user
+        //Ask the user for a query
+        System.out.println("Please type a word to search for: ");
+
+        //Create the scanner which will take user input
         Scanner sc = new Scanner(System.in);
-        // returns list of websites relative to user input
+
         while (sc.hasNext()) {
+            //Get the user's input
             String userInput = sc.next();
-            // stops program if 'quit' is a cmd line
+
+            //Stop the program if the user entered the query "quit"
             if (userInput.equals("quit")){
                 return;
             }
-            long startTime = System.nanoTime();
-            List<Page> resultsFound = hashIndex.lookup(userInput);
-            long endTime = System.nanoTime();
-            System.out.println("Time performance: " + (endTime - startTime) + " ms");
 
-            if (resultsFound.size() == 0){
-             System.out.println("No results found for user input " + userInput);
+            //Search for the user's input and get a list of results
+            List<Website> resultsFound = hashIndex.lookup(userInput);
+
+            if (resultsFound.size() == 0)
+            {
+                //Print a message to the user that no results were found
+                System.out.println("No results found for user input " + userInput);
             }
-            else {
-                for(Page s : resultsFound) {
+            else
+            {
+                System.out.println(resultsFound.size() + " websites found:");
+                //Print every website from the results list on a separate line
+                for(Website s : resultsFound)
+                {
                     System.out.println(s.getTitle() + " " + s.getUrl());
                 }
             }

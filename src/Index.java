@@ -1,4 +1,3 @@
-import java.util.AbstractMap;
 import java.util.List;
 
 /**
@@ -6,7 +5,7 @@ import java.util.List;
  */
 public interface Index
 {
-    void build(List<Page> listPages);
+    void build(List<Website> listWebsites);
 
-    List<Page> lookup(String key);
+    List<Website> lookup(String key);
 }
