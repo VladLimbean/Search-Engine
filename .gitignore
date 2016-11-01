@@ -14,3 +14,4 @@ hs_err_pid*
 # .idea folder and IntelliJ files
 .idea/
 Group-C.iml
+Data/enwiki-large.txt
