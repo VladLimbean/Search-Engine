@@ -8,14 +8,14 @@ import static org.junit.Assert.*;
  */
 public class PageTest {
 
-    private Page testPage;
+    private Website testPage;
 
     @org.junit.Before
     public void setUp() throws Exception {
         List<String> testWords = new ArrayList<String>();
         testWords.add("the");
         testWords.add("king");
-        this.testPage = new Page("www.wikipedia.com", "United" , testWords);
+        this.testPage = new Website("www.wikipedia.com", "United" , testWords);
     }
 
     @org.junit.After
@@ -26,8 +26,8 @@ public class PageTest {
 
     @org.junit.Test
     public void containsWord() throws Exception {
-        assertEquals(true, this.testPage.containsWord("the"));
-        assertEquals(false, this.testPage.containsWord("4chan"));
+        assertEquals(true, this.testPage.getWords().contains("the"));
+        assertEquals(false, this.testPage.getWords().contains("4chan"));
     }
 
     @org.junit.Test
