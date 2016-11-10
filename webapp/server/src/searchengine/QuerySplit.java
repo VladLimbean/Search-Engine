@@ -1,7 +1,10 @@
 package searchengine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -19,12 +22,13 @@ public class QuerySplit {
      */
     public static List<Website> searchSplitter(String query, Index index) {
         //Create the list that will hold all results from every search
-        List<Website> finalResult = new ArrayList<>();
+        Map<Website, Double> finalResult = new HashMap<>();
 
         //Split the query by OR
         String[] splitByOR = query.split(" OR ");
 
         for(String s : splitByOR){
+            Map<Website, Double> tempMap = new HashMap<>();
             //Split all subqueries by whitespace
             String[] splitBySPACE = s.split(" ");
 
@@ -34,14 +38,32 @@ public class QuerySplit {
 
                 //Add all partial results to the final list, while excluding duplicates
                 for (Website website : tempResults) {
-                    if (!finalResult.contains(website)) {
-                        finalResult.add(website);
+                    double score = FinalScore.getScore(e.toLowerCase(), website, index);
+                    if(tempMap.containsKey(website)){
+                        double tempScore = tempMap.get(website);
+                        tempScore+=score;
+                        tempMap.put(website, tempScore);
+                    }
+                    else{
+                        tempMap.put(website, score);
+                    }
+
+                }
+                for(Website website : tempMap.keySet()){
+                    if(!finalResult.containsKey(website)){
+                        finalResult.put(website,tempMap.get(website));
+                    }
+                    else{
+                        double checkScore = finalResult.get(website);
+                        if(checkScore<tempMap.get(website)){
+                            finalResult.put(website, tempMap.get(website));
+                        }
                     }
                 }
             }
         }
-
-        return finalResult;
+        //final boss
+        return finalResult.entrySet().stream().sorted((x,y)->y.getValue().compareTo(x.getValue())).map(Map.Entry::getKey).collect(Collectors.toList());
     }
 
     /**

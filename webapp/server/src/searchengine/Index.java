@@ -10,4 +10,6 @@ public interface Index
     void build(List<Website> listWebsites);
 
     List<Website> lookup(String key);
+
+    int getSize();
 }

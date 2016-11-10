@@ -8,7 +8,8 @@ import java.util.*;
  */
 public class InvertedIndex implements Index
 {
-    public Map<String, List<Website>> mainMap;
+    private Map<String, List<Website>> mainMap;
+    private int numberOfWebsites;
 
     public InvertedIndex(Map<String, List<Website>> map)
     {
@@ -17,6 +18,7 @@ public class InvertedIndex implements Index
 
     public void build(List<Website> listWebsites)
     {
+        numberOfWebsites = listWebsites.size();
         //Go through every website in the list
         for (Website website : listWebsites)
         {
@@ -63,6 +65,11 @@ public class InvertedIndex implements Index
             //It doesn't, so return an empty list
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public int getSize() {
+        return numberOfWebsites;
     }
 
     public String toString()

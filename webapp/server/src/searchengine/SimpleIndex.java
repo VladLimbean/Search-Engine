@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class SimpleIndex implements Index
 {
-    public List<Website> listWebsites;
+    private List<Website> listWebsites;
 
     public void build(List<Website> listWebsites)
     {
@@ -36,6 +36,11 @@ public class SimpleIndex implements Index
 
         //Return the final list of results
         return resultsFound;
+    }
+
+    @Override
+    public int getSize() {
+        return listWebsites.size();
     }
 
     public String toString()
