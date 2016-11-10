@@ -88,7 +88,7 @@ public class SearchEngine extends ResourceConfig {
         System.out.println("Handling request for query word \"" + query + "\"");
 
         // Search for line in the list of websites.
-            List<Website> resultsFound = QuerySplit.guy1(query, index);
+            List<Website> resultsFound = QuerySplit.getMatchingWebsites(query, index);
         for(Website w: resultsFound) {
             resultList.add(w.getTitle() + ": " + w.getUrl());
         }
