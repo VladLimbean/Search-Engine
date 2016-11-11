@@ -27,41 +27,39 @@ public class QuerySplit {
         //Split the query by OR
         String[] splitByOR = query.split(" OR ");
 
-        for(String s : splitByOR){
-            Map<Website, Double> tempMap = new HashMap<>();
+        for(String s : splitByOR) {
             //Split all subqueries by whitespace
             String[] splitBySPACE = s.split(" ");
 
-            for (String e : splitBySPACE){
+            List<Website> websitesMatched = new ArrayList<>();
+            for (String e : splitBySPACE) {
                 //Search for each specific keyword (by lowercase)
                 List<Website> tempResults = index.lookup(e.toLowerCase());
-
-                //Add all partial results to the final list, while excluding duplicates
-                for (Website website : tempResults) {
-                    double score = FinalScore.getScore(e.toLowerCase(), website, index);
-                    if(tempMap.containsKey(website)){
-                        double tempScore = tempMap.get(website);
-                        tempScore+=score;
-                        tempMap.put(website, tempScore);
-                    }
-                    else{
-                        tempMap.put(website, score);
-                    }
-
+                if (websitesMatched.size() == 0) {
+                    websitesMatched.addAll(tempResults);
+                } else {
+                    websitesMatched.retainAll(tempResults);
                 }
-                for(Website website : tempMap.keySet()){
-                    if(!finalResult.containsKey(website)){
-                        finalResult.put(website,tempMap.get(website));
+            }
+
+            //Add all partial results to the final list, while excluding duplicates
+            for (Website website : websitesMatched) {
+                double finalScore = 0;
+                for (String e : splitBySPACE) {
+                    finalScore += FinalScore.getScore(e.toLowerCase(), website, index);
+                }
+
+                if (finalResult.containsKey(website)) {
+                    double currentSiteValue = finalResult.get(website);
+                    if (finalScore > currentSiteValue) {
+                        finalResult.put(website, finalScore);
                     }
-                    else{
-                        double checkScore = finalResult.get(website);
-                        if(checkScore<tempMap.get(website)){
-                            finalResult.put(website, tempMap.get(website));
-                        }
-                    }
+                } else {
+                    finalResult.put(website, finalScore);
                 }
             }
         }
+
         //final boss
         return finalResult.entrySet().stream().sorted((x,y)->y.getValue().compareTo(x.getValue())).map(Map.Entry::getKey).collect(Collectors.toList());
     }
