@@ -32,10 +32,10 @@ public class QuerySplit {
             String[] splitBySPACE = s.split(" ");
 
             List<Website> websitesMatched = new ArrayList<>();
-            for (String e : splitBySPACE) {
+            for (int i = 0; i < splitBySPACE.length; i++ ) {
                 //Search for each specific keyword (by lowercase)
-                List<Website> tempResults = index.lookup(e.toLowerCase());
-                if (websitesMatched.size() == 0) {
+                List<Website> tempResults = index.lookup(splitBySPACE[i].toLowerCase());
+                if (i == 0) {
                     websitesMatched.addAll(tempResults);
                 } else {
                     websitesMatched.retainAll(tempResults);
@@ -45,16 +45,25 @@ public class QuerySplit {
             //Add all partial results to the final list, while excluding duplicates
             for (Website website : websitesMatched) {
                 double finalScore = 0;
+
+                //Calculate the total score of the subquery
                 for (String e : splitBySPACE) {
                     finalScore += FinalScore.getScore(e.toLowerCase(), website, index);
                 }
 
+                //Check the map for this website
                 if (finalResult.containsKey(website)) {
+                    //The map contains the website, so check it's currently saved score
                     double currentSiteValue = finalResult.get(website);
+
+                    //Check if the current score is bigger than the score saved in the map
                     if (finalScore > currentSiteValue) {
+                        //Update the score because we found a max
                         finalResult.put(website, finalScore);
                     }
-                } else {
+                }
+                else {
+                    //The website is not contained in the map, so add it
                     finalResult.put(website, finalScore);
                 }
             }
@@ -115,9 +124,15 @@ public class QuerySplit {
         //Create the list that will hold all results
         List<Website> finalResult = new ArrayList<>();
 
-        for(String s: splitByWhitespace){
-            //Search for every specific keyword and add the results from it to the list
-            finalResult.addAll(index.lookup(s));
+        for (int i = 0; i < splitByWhitespace.length; i++){
+            //Search for every specific keyword
+            List<Website> partialResults = index.lookup(splitByWhitespace[i]);
+            if (i == 0) {
+                finalResult.addAll(partialResults);
+            }
+            else {
+                finalResult.retainAll(partialResults);
+            }
         }
 
         //Return the list
