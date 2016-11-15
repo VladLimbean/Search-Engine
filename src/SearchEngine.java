@@ -7,6 +7,8 @@ public class SearchEngine
     {
         //Parse the .txt file
         List<Website> websites = FileHelper.parseFile(args[0]);
+        Index index = new InvertedIndex(true);
+        index.build(websites);
 
         //Print out some friendly messages
         System.out.println("Welcome to the Search Engine!");
@@ -27,23 +29,17 @@ public class SearchEngine
                 break;
             }
 
-            //Start a counter
-            int counter = 0;
+            //Execute the search
+            List<Website> results = index.lookup(query);
 
-
-            //Go though all websites
-            for (Website w : websites)
+            //Go though all websites in the results
+            for (Website w : results)
             {
-                //If the specific website contains the query, print the website
-                if (w.getKeywords().contains(query))
-                {
-                    System.out.println(w.getTitle() + ": " + w.getUrl());
-                    counter++;
-                }
+                System.out.println(w.getTitle() + ": " + w.getUrl());
             }
 
             //Print a message if no results were found
-            if (counter == 0)
+            if (results.size() == 0)
             {
                 System.out.println("No results found!");
             }

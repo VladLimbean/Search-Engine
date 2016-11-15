@@ -9,7 +9,8 @@ public class Website
     private String title;
     private List<String> keywords;
 
-    /** Constructor for creating new website objects
+    /**
+     * Constructor for creating new website objects
      * @param url The URL of the website
      * @param title The title of the website
      * @param keywords All keywords associated with the website
@@ -26,7 +27,8 @@ public class Website
         this.keywords = keywords;
     }
 
-    /** Returns the URL of the website
+    /**
+     * Returns the URL of the website
      * @return the website's URL
      */
     public String getUrl()
@@ -34,7 +36,8 @@ public class Website
         return this.url;
     }
 
-    /** Returns the title of the website
+    /**
+     * Returns the title of the website
      * @return the website's title
      */
     public String getTitle()

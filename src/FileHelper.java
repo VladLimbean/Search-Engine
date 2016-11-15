@@ -9,7 +9,8 @@ import java.util.Scanner;
  */
 public class FileHelper
 {
-    /** Reads the .txt file and makes a list of websites
+    /**
+     * Reads the .txt file and makes a list of websites
      * @param arg The location of the .txt file that is supposed to be parsed
      * @return A list of websites based on the contents of the .txt file
      */
@@ -89,7 +90,8 @@ public class FileHelper
         return finalList;
     }
 
-    /** Checks if the current line in the .txt is supposed to be the URL
+    /**
+     * Checks if the current line in the .txt is supposed to be the URL
      * @param line The current line
      * @return True if the current line is the URL
      */
@@ -98,7 +100,8 @@ public class FileHelper
         return line.startsWith("*PAGE:");
     }
 
-    /** Checks if the current line in the .txt is supposed to be the title
+    /**
+     * Checks if the current line in the .txt is supposed to be the title
      * @param title Current value of the title variable
      * @return True if the current line is the title
      */
@@ -107,7 +110,8 @@ public class FileHelper
         return (title == null);
     }
 
-    /** Checks if a website can be created based on the values stored in URL, Title, and keywords
+    /**
+     * fv rtChecks if a website can be created based on the values stored in URL, Title, and keywords
      * @param url The current value of the URL variable
      * @param title The current value of the title variable
      * @param keywords The current value of the keywords list variable
