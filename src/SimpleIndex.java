@@ -31,4 +31,9 @@ public class SimpleIndex implements Index
         //Return all websites that were found
         return results;
     }
+
+    @Override
+    public String toString() {
+        return this.getClass().toString();
+    }
 }
