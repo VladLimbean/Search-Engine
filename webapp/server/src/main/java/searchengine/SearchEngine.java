@@ -88,7 +88,7 @@ public class SearchEngine extends ResourceConfig
 
 
         //Search for the query in the list of websites.
-        List<Website> resultList = index.lookup(query);
+        List<Website> resultList = QuerySplit.getMatchingWebsites(query, index);
 
         //Create the string list that will be returned by the method
         List<String> listToReturn = new ArrayList<>();
