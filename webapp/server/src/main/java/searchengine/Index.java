@@ -19,4 +19,10 @@ public interface Index
      * @param query Phrase to search
      */
     List<Website> lookup(String query);
+
+    /**
+     * Calculates the total number of websites in the index
+     * @return The total number of websites
+     */
+    int getSize();
 }

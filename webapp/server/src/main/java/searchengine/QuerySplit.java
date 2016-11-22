@@ -1,7 +1,10 @@
 package searchengine;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Handles the search for complex queries that hold multiple words and subqueries
@@ -11,36 +14,38 @@ public class QuerySplit
 {
     /**
      * Searches for every word of a complex query and returns all results taht match it
-     * @param query Search string that the user entered
-     * @param index Index to use for searching purposes
+     *
+     * @param query          Search string that the user entered
+     * @param index          Index to use for searching purposes
+     * @param rankingHandler Ranking object that will rank the website result list
      * @return Final list of results
      */
-    public static List<Website> getMatchingWebsites(String query, Index index)
+    public static List<Website> getMatchingWebsites(String query, Index index, Score rankingHandler)
     {
         //Split the query by the " OR " operator
         String[] splitByOr = query.split(" OR ");
 
         //Search for all subqueries and save the results in a list
-        List<Website> finalResults = evaluateFullQuery(splitByOr, index);
+        List<Website> finalResults = evaluateFullQuery(splitByOr, index, rankingHandler);
 
-        //Return all matching websites
+        //Return all matching websites, ranked using the provided ranking handler
         return finalResults;
     }
 
     /**
      * Handles the complex query search
-     * @param splitByOr
-     * @param index
+     *
+     * @param splitByOr String array that holds all substrings without the " OR " operator
+     * @param index     Index used for searching
      * @return
      */
-    private static List<Website> evaluateFullQuery(String[] splitByOr, Index index)
+    private static List<Website> evaluateFullQuery(String[] splitByOr, Index index, Score rankingHandler)
     {
-        //Initialize an object that will hold the results
-        List<Website> resultsFromFullquery = new ArrayList<>();
+        //Initialize the map that holds all results. Key is the website, value is it's rank in the query
+        Map<Website, Double> rankingMap = new HashMap<>();
 
         //Go though all strings that are split by the " OR " operator
-        for (String fullquery : splitByOr)
-        {
+        for (String fullquery : splitByOr) {
             //Split the substring by the whitespace operator
             String[] splitBySpace = fullquery.split(" ");
 
@@ -50,16 +55,18 @@ public class QuerySplit
             //Add all results in the final list, if they are not already there
             for (Website w : partialResults)
             {
-                if (!resultsFromFullquery.contains(w))
-                {
-                    //The website should be in the final list but is not there yet, so add it
-                    resultsFromFullquery.add(w);
-                }
+                //Calculate the ranking score of the website
+                double scoreForQuery = calculateSubqueryRanking(splitBySpace, w, index, rankingHandler);
+
+                //Update the ranking map based on the score that was just calculated
+                rankingMap = updateWebsiteInMap(w, scoreForQuery, rankingMap);
             }
         }
 
-        //Return the list that holds all results
-        return resultsFromFullquery;
+        //final boss
+        return rankingMap.entrySet().stream().sorted((x, y) -> y.getValue()
+                .compareTo(x.getValue())).map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
     private static List<Website> evaluateSubQuery(String[] splitBySpace, Index index)
@@ -87,5 +94,43 @@ public class QuerySplit
 
         //Return the final list of results for the subquery
         return resultsToReturn;
+    }
+
+    private static double calculateSubqueryRanking(String[] splitByWhitespace, Website website, Index indexToUse, Score rankingHandler) {
+        //Initialize the score holder
+        double scoreForQuery = 0;
+
+        //Increment the score of the subquery for each string in it
+        for (String substring : splitByWhitespace)
+        {
+            scoreForQuery += rankingHandler.getScore(substring.toLowerCase(), website, indexToUse);
+        }
+
+        //Return the final score of the whole query
+        return scoreForQuery;
+    }
+
+    private static Map<Website, Double> updateWebsiteInMap(Website websiteToUpdate, double newlyCalculatedScore, Map<Website, Double> currentMap)
+    {
+        //Check is the website is already in the ranking map
+        if (currentMap.containsKey(websiteToUpdate))
+        {
+            //The map contains the website, so check its' currently saved score
+            double scoreInMap = currentMap.get(websiteToUpdate);
+
+            //Check if the calculated score is bigger than the score saved in the map
+            if (newlyCalculatedScore > scoreInMap)
+            {
+                //Update the score because we found a max
+                currentMap.put(websiteToUpdate, newlyCalculatedScore);
+            }
+        }
+        else
+        {
+            //This is the first time we add this website to the rankin
+            currentMap.put(websiteToUpdate, newlyCalculatedScore);
+        }
+
+        return currentMap;
     }
 }

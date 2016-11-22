@@ -9,6 +9,8 @@ public class InvertedIndex implements Index
 {
     private Map<String, List<Website>> websites;
 
+    private int websitesCount;
+
     /**
      * Creates the InvertedIndex object
      * @param shouldUseHashMap True if HashMap is to be used, false if TreeMap is to be used
@@ -23,10 +25,14 @@ public class InvertedIndex implements Index
         {
             this.websites = new TreeMap<>();
         }
+
+        this.websitesCount = 0;
     }
 
     public void build(List<Website> websites)
     {
+        this.websitesCount = websites.size();
+
         //Go through every website in the list
         for (Website website : websites)
         {
@@ -73,6 +79,12 @@ public class InvertedIndex implements Index
             //It doesn't, so return an empty list
             return new ArrayList<>();
         }
+    }
+
+    @Override
+    public int getSize()
+    {
+        return this.websitesCount;
     }
 
     @Override

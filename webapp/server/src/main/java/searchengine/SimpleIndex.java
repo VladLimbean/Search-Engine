@@ -35,6 +35,12 @@ public class SimpleIndex implements Index
     }
 
     @Override
+    public int getSize()
+    {
+        return this.websites.size();
+    }
+
+    @Override
     public String toString() {
         return this.getClass().toString();
     }

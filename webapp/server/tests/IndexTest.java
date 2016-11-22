@@ -34,13 +34,28 @@ public class IndexTest
         List<Website> americaTest = this.indexToTest.lookup("america");
         assertEquals(1, americaTest.size());
         assertEquals("United States", americaTest.get(0).getTitle());
+    }
 
+    @Test
+    public void secondWebsiteTest() throws Exception
+    {
         List<Website> denmarkTest = this.indexToTest.lookup("denmark");
         assertEquals(1, denmarkTest.size());
         assertEquals("Denmark", denmarkTest.get(0).getTitle());
+    }
 
+    @Test
+    public void thirdWebsiteTest() throws Exception
+    {
         List<Website> japanTest = this.indexToTest.lookup("japan");
         assertEquals(1, japanTest.size());
         assertEquals("Japan", japanTest.get(0).getTitle());
+    }
+
+    @Test
+    public void noResultsTest() throws Exception
+    {
+        List<Website> noResultsTest = this.indexToTest.lookup("asdf");
+        assertEquals(0, noResultsTest.size());
     }
 }

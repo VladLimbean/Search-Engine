@@ -27,6 +27,7 @@ import java.util.List;
 public class SearchEngine extends ResourceConfig
 {
     private static Index index;
+    private static Score rankingHandler;
 
     public SearchEngine() {
         packages("searchengine");
@@ -56,6 +57,9 @@ public class SearchEngine extends ResourceConfig
         //Create the Index and build it using the parsed list
         index = new InvertedIndex(true);
         index.build(list);
+
+        //Create the ranking handler
+        rankingHandler = new ScoreTFIDF();
 
         // Later: Build the index from this list.
         SpringApplication.run(SearchEngine.class, args);
@@ -88,7 +92,7 @@ public class SearchEngine extends ResourceConfig
 
 
         //Search for the query in the list of websites.
-        List<Website> resultList = QuerySplit.getMatchingWebsites(query, index);
+        List<Website> resultList = QuerySplit.getMatchingWebsites(query, index, rankingHandler);
 
         //Create the string list that will be returned by the method
         List<String> listToReturn = new ArrayList<>();

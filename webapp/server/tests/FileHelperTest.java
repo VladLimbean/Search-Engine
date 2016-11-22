@@ -32,7 +32,7 @@ public class FileHelperTest
     @Test
     public void checkContentsTest() throws Exception
     {
-        assertEquals(this.parsedList.size(), 3);
+        assertEquals(this.parsedList.size(), 4);
 
         Website first = this.parsedList.get(0);
         assertEquals(first.getUrl(), "https://en.wikipedia.org/wiki/United_States");
