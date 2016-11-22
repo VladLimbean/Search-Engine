@@ -15,6 +15,4 @@ hs_err_pid*
 .idea/
 Group-C.iml
 webapp/server/data/*.txt
-out/
-out/production
-out/production/Group-C
+webapp/server/target/

@@ -24,8 +24,9 @@ import java.util.List;
 @Configuration
 @EnableAutoConfiguration
 @Path("/")
-public class SearchEngine extends ResourceConfig {
-    private static List<Website> list;
+public class SearchEngine extends ResourceConfig
+{
+    private static Index index;
 
     public SearchEngine() {
         packages("searchengine");
@@ -39,16 +40,22 @@ public class SearchEngine extends ResourceConfig {
      *
      * @param args command line arguments.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         System.out.println("Welcome to the Search Engine");
 
-        if (args.length != 1) {
+        if (args.length != 1)
+        {
             System.out.println("Error: Please provide a filename <filename>");
             return;
         }
 
         // Build the list of websites using the FileHelper.
-        list = FileHelper.parseFile(args[0]);
+        List<Website> list = FileHelper.parseFile(args[0]);
+
+        //Create the Index and build it using the parsed list
+        index = new InvertedIndex(true);
+        index.build(list);
 
         // Later: Build the index from this list.
         SpringApplication.run(SearchEngine.class, args);
@@ -66,30 +73,33 @@ public class SearchEngine extends ResourceConfig {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("search")
-    public List<String> search(@Context HttpServletResponse response, @QueryParam("query") String query) {
+    public List<String> search(@Context HttpServletResponse response, @QueryParam("query") String query)
+    {
         // Set crossdomain access. Otherwise your browser will complain that it does not want
         // to load code from a different location.
         response.setHeader("Access-Control-Allow-Origin", "*");
 
-        List<String> resultList = new ArrayList<>();
-
-        if (query == null) {
-            return resultList;
+        if (query == null)
+        {
+            return new ArrayList<String>();
         }
-
-        String line = query;
 
         System.out.println("Handling request for query word \"" + query + "\"");
 
-        // Search for line in the list of websites.
-        for (Website w: list) {
-            if (w.containsWord(line)) {
-                resultList.add(w.getUrl());
-            }
+
+        //Search for the query in the list of websites.
+        List<Website> resultList = index.lookup(query);
+
+        //Create the string list that will be returned by the method
+        List<String> listToReturn = new ArrayList<>();
+        for (Website w : resultList)
+        {
+            listToReturn.add(w.getUrl());
         }
 
-        System.out.println("Found " + resultList.size() + " websites.");
-        return resultList;
-    }
+        System.out.println("Found " + listToReturn.size() + " websites.");
 
+        //Return the final list
+        return listToReturn;
+    }
 }
