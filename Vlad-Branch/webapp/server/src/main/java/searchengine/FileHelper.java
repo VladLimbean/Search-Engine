@@ -25,7 +25,8 @@ public class FileHelper {
             Scanner sc = new Scanner(new File(arg));
 
             while (sc.hasNext()) {
-                String currentLine = sc.next().trim();
+                //must be nextLine otherwise multiple words on one line are considered individual tokens by the scanner
+                String currentLine = sc.nextLine().trim();
 
                 if (currentLine.startsWith("*PAGE:")) {
                     if (url != null && title != null && words != null) {
