@@ -26,7 +26,7 @@ public class Website {
     }
 
     /**
-     * Checks if any words are contained in the website
+     * Checks if any words are contained in the website.
      *
      * @return true if the list of words is not empty, false otherwise.
      */
@@ -66,27 +66,39 @@ public class Website {
     /**
      * Returns website URL
      *
-     * @return
+     * @return return the website URL.
      */
     public String getUrl(){
         return this.url;
     }
 
     /**
-     * Returns website title
+     * Returns website title.
      *
-     * @return
+     * @return the website title.
      */
     public String getTitle(){
         return this.title;
     }
 
     /**
-     * Returns website words
+     * Returns website words.
      *
-     * @return
+     * @return list of all words.
      */
+
     public List<String> getWords(){
         return this.words;
+    }
+
+    /**
+     * Checks if word is contained.
+     *
+     * @param word
+     *
+     * @return true if word is contained, false if otherwise.
+     */
+    public boolean containsWord(String word){
+        return this.words.contains(word);
     }
 }

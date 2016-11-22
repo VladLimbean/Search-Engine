@@ -8,6 +8,10 @@ import java.util.Map;
 public class InvertedIndex implements Index {
     public Map<String, List<Website>> mapOfWebsites;
 
+    public InvertedIndex(Map<String, List<Website>> map){
+        this.mapOfWebsites = map;
+    }
+
     /**
      * Receives a List of Websites
      * Creates a hash map with Key - query word & Values - List of websites
@@ -15,7 +19,6 @@ public class InvertedIndex implements Index {
      * @param list
      */
     public void build(List<Website> list) {
-        mapOfWebsites = new HashMap<>();
 
         for(Website w : list){
             for(String s : w.getWords()){
@@ -32,14 +35,10 @@ public class InvertedIndex implements Index {
                     mapOfWebsites.put(s,newList);
                 }
             }
-
         }
     }
-
-
     public List<Website> lookup(String query)
     {
-
         if (mapOfWebsites.containsKey(query)){
             return mapOfWebsites.get(query);
         }

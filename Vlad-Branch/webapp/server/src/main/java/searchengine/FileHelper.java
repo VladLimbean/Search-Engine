@@ -12,7 +12,7 @@ public class FileHelper {
      * Each website is added to a list
      *
      * @param arg
-     * @return list of websites
+     * @return list of websites.
      */
     public static List<Website> fileReader(String arg){
 

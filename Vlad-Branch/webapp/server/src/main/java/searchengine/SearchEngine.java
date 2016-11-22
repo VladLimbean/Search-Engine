@@ -13,6 +13,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -26,6 +27,7 @@ import java.util.List;
 @Path("/")
 public class SearchEngine extends ResourceConfig {
     private static List<Website> list;
+    private static Index index;
 
     public SearchEngine() {
         packages("searchengine");
@@ -40,17 +42,17 @@ public class SearchEngine extends ResourceConfig {
      * @param args command line arguments.
      */
     public static void main(String[] args) {
-        System.out.println("Welcome to the Search Engine");
-
         if (args.length != 1) {
             System.out.println("Error: Please provide a filename <filename>");
             return;
         }
+        list = FileHelper.fileReader("Data/enwiki-tiny.txt");
 
-        // Build the list of websites using the FileHelper.
-        list = FileHelper.fileReader(args[0]);
+        // Later: Build the index from this list
 
-        // Later: Build the index from this list.
+        index = new InvertedIndex(new HashMap<>());
+        index.build(list);
+
         SpringApplication.run(SearchEngine.class, args);
     }
 
@@ -77,19 +79,14 @@ public class SearchEngine extends ResourceConfig {
             return resultList;
         }
 
-        String line = query;
-
         System.out.println("Handling request for query word \"" + query + "\"");
 
         // Search for line in the list of websites.
-        for (Website w: list) {
-            if (w.containsWord(line)) {
-                resultList.add(w.getUrl());
-            }
+        for (Website w : index.lookup(query)){
+            resultList.add(w.getUrl());
         }
 
         System.out.println("Found " + resultList.size() + " websites.");
         return resultList;
     }
-
 }
