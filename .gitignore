@@ -14,7 +14,7 @@ hs_err_pid*
 # .idea folder and IntelliJ files
 .idea/
 Group-C.iml
-server/data/*.txt
+webapp/server/data/*.txt
 out/
 out/production
 out/production/Group-C
