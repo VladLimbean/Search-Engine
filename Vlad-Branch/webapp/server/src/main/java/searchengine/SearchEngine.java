@@ -85,7 +85,9 @@ public class SearchEngine extends ResourceConfig {
         for (Website w : index.lookup(query)){
             resultList.add(w.getUrl());
         }
-
+        if (resultList.isEmpty()){
+            resultList.add("No results found for " + query);
+        }
         System.out.println("Found " + resultList.size() + " websites.");
         return resultList;
     }
