@@ -82,8 +82,11 @@ public class QuerySplit
             //If the resultsToReturn list is null, that means we are in the first iteration of the loop
             if (resultsToReturn == null)
             {
+                //Actually create the list
+                resultsToReturn = new ArrayList<>();
+
                 //Since this is the first iteration of the loop, add all results to the list
-                resultsToReturn = partialResults;
+                resultsToReturn.addAll(partialResults);
             }
             else
             {
@@ -103,7 +106,7 @@ public class QuerySplit
         //Increment the score of the subquery for each string in it
         for (String substring : splitByWhitespace)
         {
-            scoreForQuery += rankingHandler.getScore(substring.toLowerCase(), website, indexToUse);
+            scoreForQuery += rankingHandler.getScore(substring.toLowerCase(), website);
         }
 
         //Return the final score of the whole query

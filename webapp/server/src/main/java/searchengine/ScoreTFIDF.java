@@ -6,11 +6,18 @@ package searchengine;
  */
 public class ScoreTFIDF implements Score
 {
-    public double getScore(String keyword, Website website, Index index)
+    private Index index;
+
+    public ScoreTFIDF(Index indexToUse)
+    {
+        this.index = indexToUse;
+    }
+
+    public double getScore(String keyword, Website website)
     {
         //Calculate the two different
         double termFrequency = calculateTermFrequency(keyword, website);
-        double inverseDocFrequency = calculateInverseDocumentFrequency(keyword, index);
+        double inverseDocFrequency = calculateInverseDocumentFrequency(keyword);
 
         //Multiply them to get the final score of the website
         double totalScore = termFrequency * inverseDocFrequency;
@@ -48,9 +55,8 @@ public class ScoreTFIDF implements Score
      * Calculates the inverse document frequency of a website based on the specific keyword
      * @return The inverse document frequency score of the website
      * @param keyword Keyword to calculate the score based on
-     * @param index Index to use for searching purposes
      */
-    private double calculateInverseDocumentFrequency(String keyword, Index index)
+    private double calculateInverseDocumentFrequency(String keyword)
     {
         //Get the total number of websites
         int numberOfWebsites = index.getSize();

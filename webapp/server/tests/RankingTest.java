@@ -22,7 +22,7 @@ public class RankingTest
         this.index = new InvertedIndex(true);
         this.index.build(testList);
 
-        this.rankingHandler = new ScoreTFIDF();
+        this.rankingHandler = new ScoreTFIDF(this.index);
     }
 
     @After

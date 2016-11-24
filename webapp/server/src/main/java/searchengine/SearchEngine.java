@@ -59,7 +59,7 @@ public class SearchEngine extends ResourceConfig
         index.build(list);
 
         //Create the ranking handler
-        rankingHandler = new ScoreTFIDF();
+        rankingHandler = new ScoreTFIDF(index);
 
         // Later: Build the index from this list.
         SpringApplication.run(SearchEngine.class, args);

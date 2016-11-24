@@ -22,7 +22,7 @@ public class QuerySplitTest
         this.indexToTest = new InvertedIndex(true);
         this.indexToTest.build(testList);
 
-        this.rankingHandler = new ScoreTFIDF();
+        this.rankingHandler = new ScoreTFIDF(this.indexToTest);
     }
 
     @After
