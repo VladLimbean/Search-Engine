@@ -44,19 +44,17 @@ public class BenchmarkIndex
             a++;
         }
 
-        //Initialize the counter that will hold the total runtime
-        long totalTime = 0;
+        //Save the time when the test starts
+        long startTime = System.nanoTime();
 
         for (int i = 0; i < testLoopsCount; i++)
         {
-            long startTime = System.nanoTime();
-
-            //Execute the build funcion
+            //Execute the build function
             indexToTest.build(listOfWebsites);
-
-            //Add the build runtime to the total time variable
-            totalTime += (System.nanoTime() - startTime);
         }
+
+        //Get the total time
+        long totalTime = System.nanoTime() - startTime;
 
         //Calculate the average runtime
         long averageTime = (totalTime / testLoopsCount);
@@ -78,8 +76,8 @@ public class BenchmarkIndex
             a++;
         }
 
-        //Initialize the counter that will hold the total runtime
-        long totalTime = 0;
+        //Save the time when the test starts
+        long startTime = System.nanoTime();
 
         int totalResults = 0;
 
@@ -88,18 +86,16 @@ public class BenchmarkIndex
         {
             for (int i = 0; i < testLoopsCount; i++)
             {
-                long startTime = System.nanoTime();
-
                 //Execute the lookup function
                 List<Website> results = indexToTest.lookup(word);
-
-                //Add the build runtime to the total time variable
-                totalTime += (System.nanoTime() - startTime);
 
                 //Log the total results count
                 totalResults += results.size();
             }
         }
+
+        //Get the total time
+        long totalTime = (System.nanoTime() - startTime);
 
         //Calculate the average runtime
         long averageTime = (totalTime / (testLoopsCount * testQueries.length));
