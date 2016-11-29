@@ -1,15 +1,11 @@
 import java.util.List;
 
 /**
- * Created by IRCT on 11/20/2016.
+ * Created by IRCT on 11/21/2016.
  */
-public class InterfaceIndex {
-
-    //simple inteface contains global create list & find Keyword method, for all indexes implementing interface
-    public interface IndexInterface {
-
-    void createList (List<Website> listWebsites);
-
-    List<Website> findKeyword(String key);
-    }
+public interface InterfaceIndex {
+    //Imterface method shared by all Indexes, this one builds the list of Websites
+    void buildList(List<Website> listWebsite);
+    //This one gets a string and search for it in the list of Websites
+    List<Website> findKeyword(String query);
 }

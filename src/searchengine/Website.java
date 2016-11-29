@@ -1,7 +1,7 @@
 import java.util.List;
 
 /**
- * Created by IRCT on 11/22/2016.
+ * Created by IRCT on 11/19/2016.
  */
 public class Website {
     private String url;
@@ -31,4 +31,11 @@ public class Website {
         return this.content;
     }
 
+    public boolean hasKeyword(String query) {
+            return this.title.contains(query);
+        }
+
+
+
 }
+
