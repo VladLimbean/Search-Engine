@@ -18,7 +18,7 @@ public class IndexTest
     public void setUp() throws Exception
     {
         List<Website> testList = FileHelper.parseFile("test-resources/test.txt");
-        this.indexToTest = new InvertedIndex(false);
+        this.indexToTest = new SimpleIndex();
         this.indexToTest.build(testList);
     }
 

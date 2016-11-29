@@ -90,7 +90,6 @@ public class SearchEngine extends ResourceConfig
 
         System.out.println("Handling request for query word \"" + query + "\"");
 
-
         //Search for the query in the list of websites.
         List<Website> resultList = QuerySplit.getMatchingWebsites(query, index, rankingHandler);
 
