@@ -30,7 +30,7 @@ public class InvertedIndex implements Index {
                 if(!mainMap.containsKey(word)){
                     mapWebsite.add(website);
                 }
-                if(mainMap.containsKey(word)){
+                else{
                     mapWebsite = mainMap.get(word);
                     mapWebsite.add(website);
                 }
@@ -42,6 +42,7 @@ public class InvertedIndex implements Index {
     @Override
     public List<Website> lookup(String query) {
         List<Website> keyWebsites = new ArrayList<>();
+
         if(mainMap.containsKey(query)){
             keyWebsites = mainMap.get(query);
         }

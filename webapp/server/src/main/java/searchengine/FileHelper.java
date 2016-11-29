@@ -21,7 +21,7 @@ public class FileHelper {
             while(sc.hasNext()){
                 String line = sc.next().trim();
                 if (line.startsWith("*PAGE:")){
-                    if(url!= null){
+                    if(url != null && title != null && wordList != null){
                         result.add(new Website(url, title,wordList));
                     }
                     title = null;
@@ -36,7 +36,7 @@ public class FileHelper {
                         wordList = new ArrayList<String>();
                     }
                         wordList.add(line);
-                    }
+                }
             }
 
                 if (url != null && title != null && wordList != null){

@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Query {
 
-    public List<Website> split(String query, Index index) {
+    public static List<Website> split(String query, Index index) {
         List<Website> splitByOrWebsites = new ArrayList<>();
 
         String[] splitByOr = query.split(" OR ");

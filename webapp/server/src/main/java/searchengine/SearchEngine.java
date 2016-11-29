@@ -12,10 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * The main class of our search engine program.
@@ -27,8 +24,8 @@ import java.util.Scanner;
 @EnableAutoConfiguration
 @Path("/")
 public class SearchEngine extends ResourceConfig {
-    private static List<Website> list;
-    private static Index indexInverted;
+        private static List<Website> list;
+        private static Index indexInverted;
 
     public SearchEngine() {
         packages("searchengine");
@@ -55,7 +52,7 @@ public class SearchEngine extends ResourceConfig {
         // Build the list of websites using the FileHelper.
         list = FileHelper.parseFile(args[0]);
 
-        indexInverted = new InvertedIndex(new HashMap<>());
+        indexInverted = new InvertedIndex(new TreeMap<>());
         indexInverted.build(list);
 
         // Later: Build the index from this list.
@@ -90,7 +87,7 @@ public class SearchEngine extends ResourceConfig {
         System.out.println("Handling request for query word \"" + query + "\"");
 
         // Search for line in the list of websites.
-        List<Website> listOfWebsites = indexInverted.lookup(line);
+        List<Website> listOfWebsites = Query.split(query, indexInverted );
 
         for(Website w: listOfWebsites){
             String url = w.getUrl();
