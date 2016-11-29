@@ -19,19 +19,22 @@ public class BenchmarkIndex
         //Create the Simple Index
         Index simpleIndex = new SimpleIndex();
         //Test the Simple Index
-        testBuild(simpleIndex, websites);
+        //testBuild(simpleIndex, websites);
+        simpleIndex.build(websites);
         testLookup(simpleIndex);
 
         //Create the Inverted Index with a HashMap
         Index invertedIndexHash = new InvertedIndex(true);
         //Test the Inverted Index
-        testBuild(invertedIndexHash, websites);
+        //testBuild(invertedIndexHash, websites);
+        invertedIndexHash.build(websites);
         testLookup(invertedIndexHash);
 
         //Create the Inverted Index with a TreeMap
         Index invertedIndexTree = new InvertedIndex(false);
         //Test the Inverted Index
-        testBuild(invertedIndexTree, websites);
+        //testBuild(invertedIndexTree, websites);
+        invertedIndexTree.build(websites);
         testLookup(invertedIndexTree);
     }
 

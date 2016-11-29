@@ -1,0 +1,25 @@
+test
+word
+should
+fail
+*PAGE:https://en.wikipedia.org/wiki/United_States
+only title
+*PAGE:https://thisshouldwork.com
+Title
+Word1
+*PAGE:https://en.wikipedia.org/wiki/Denmark
+*PAGE:https://en.wikipedia.org/wiki/Japan
+Japan
+japan
+is
+an
+island
+country
+in
+east
+asia
+located
+in
+the
+pacific
+ocean
