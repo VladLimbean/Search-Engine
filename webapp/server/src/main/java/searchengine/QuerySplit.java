@@ -91,6 +91,13 @@ public class QuerySplit
 
         for (String subquery : splitBySpace)
         {
+            //Check if the subquery is an empty string
+            if (subquery.isEmpty())
+            {
+                //It is, so skip searching for it.
+                continue;
+            }
+
             //Search for the subquery
             List<Website> partialResults = index.lookup(subquery.toLowerCase());
 
@@ -110,6 +117,12 @@ public class QuerySplit
             }
         }
 
+        //Make sure the function doesn't return a null list
+        if (resultsToReturn == null)
+        {
+            resultsToReturn = new ArrayList<>();
+        }
+        
         //Return the final list of results for the subquery
         return resultsToReturn;
     }

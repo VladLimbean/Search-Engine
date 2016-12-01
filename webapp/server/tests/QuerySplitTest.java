@@ -73,4 +73,41 @@ public class QuerySplitTest
         List<Website> zeroResultsComplexQuery = QuerySplit.getMatchingWebsites("america denmark", this.indexToTest, this.rankingHandler);
         assertEquals(0, zeroResultsComplexQuery.size());
     }
+
+    @Test
+    public void testTwoSpacesQuery() throws Exception
+    {
+        //States  america has two spaces between them
+        List<Website> results = QuerySplit.getMatchingWebsites("states  america", this.indexToTest, this.rankingHandler);
+        assertEquals(1, results.size());
+    }
+
+    @Test
+    public void testTwoSpacesBetweenOrQuery() throws Exception
+    {
+        //States  OR  america has two spaces before OR and two after OR
+        List<Website> results = QuerySplit.getMatchingWebsites("states  OR  denmark", this.indexToTest, this.rankingHandler);
+        assertEquals(2, results.size());
+    }
+
+    @Test
+    public void testOnlySpaces() throws Exception
+    {
+        List<Website> results = QuerySplit.getMatchingWebsites("     ", this.indexToTest, this.rankingHandler);
+        assertEquals(0, results.size());
+    }
+
+    @Test
+    public void testOnlyOR() throws Exception
+    {
+        List<Website> results = QuerySplit.getMatchingWebsites(" OR ", this.indexToTest, this.rankingHandler);
+        assertEquals(0, results.size());
+    }
+
+    @Test
+    public void testOnlyORAndSpaces() throws Exception
+    {
+        List<Website> results = QuerySplit.getMatchingWebsites("     OR           ", this.indexToTest, this.rankingHandler);
+        assertEquals(0, results.size());
+    }
 }
