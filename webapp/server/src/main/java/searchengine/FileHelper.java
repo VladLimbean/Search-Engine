@@ -7,14 +7,15 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Reads a .txt file and creates a list of websites based on the contents of the .txt
+ * The class reads a .txt file and creates a list of websites based on its content.
  */
 public class FileHelper
 {
     /**
-     * Reads the .txt file and makes a list of websites
-     * @param arg The location of the .txt file that is supposed to be parsed
-     * @return A list of websites based on the contents of the .txt file
+     * Reads the .txt file and returns a list of websites.
+     *
+     * @param arg path of the .txt file.
+     * @return A list of websites based on the contents of the .txt file.
      */
     public static List<Website> parseFile(String arg)
     {
@@ -93,9 +94,10 @@ public class FileHelper
     }
 
     /**
-     * Checks if the current line in the .txt is supposed to be the URL
-     * @param line The current line
-     * @return True if the current line is the URL
+     * Checks if the current line in the .txt represents the website URL.
+     *
+     * @param line The current line.
+     * @return True if the current line represents a website URL.
      */
     private static boolean isLineURL(String line)
     {
@@ -103,9 +105,10 @@ public class FileHelper
     }
 
     /**
-     * Checks if the current line in the .txt is supposed to be the title
-     * @param title Current value of the title variable
-     * @return True if the current line is the title
+     * Checks if the current line in the .txt file represents the title of the website.
+     *
+     * @param title line in the .txt file to be checked.
+     * @return True if the current line represents the website title.
      */
     private static boolean isLineTitle(String title)
     {
@@ -113,11 +116,12 @@ public class FileHelper
     }
 
     /**
-     * fv rtChecks if a website can be created based on the values stored in URL, Title, and keywords
-     * @param url The current value of the URL variable
-     * @param title The current value of the title variable
-     * @param keywords The current value of the keywords list variable
-     * @return True if possible to add a new website
+     * Checks if a website can be created based on the values stored in URL, Title, and associated list of words.
+     *
+     * @param url The current value of the URL variable.
+     * @param title The current value of the title variable.
+     * @param keywords The current value of the keywords list variable.
+     * @return True if a new website can be added.
      */
     private static boolean canAddWebsite(String url, String title, List<String> keywords)
     {

@@ -7,18 +7,22 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
- * Handles the search for complex queries that hold multiple words and subqueries
- * Eg. "President USA OR Queen Denmark" will search for both president USA and queen denmark
+ * Handles the search for complex queries which hold multiple words or subqueries.
+ * For example, "President USA OR Queen Denmark" will search for both 'president USA' and 'queen denmark'.
  */
 public class QuerySplit
 {
     /**
-     * Searches for every word of a complex query and returns all results taht match it
+     * Searches for every word in complex query and returns all matching websites. The function will receive the user
+     * query and split it into subqueries taking into account the ' OR ' operator.
      *
-     * @param query          Search string that the user entered
-     * @param index          Index to use for searching purposes
-     * @param rankingHandler Ranking object that will rank the website result list
-     * @return Final list of results
+     * For example, "President USA OR Queen Denmark" will be split into 'president USA' and 'queen denmark'.
+     *
+     * @param query          Search string entered by the user.
+     * @param index          Index structure containing the Websites and associated words.
+     * @param rankingHandler Object which ranks the Websites in the index.
+     *
+     * @return               List of ranked results.
      */
     public static List<Website> getMatchingWebsites(String query, Index index, Score rankingHandler)
     {
@@ -33,11 +37,15 @@ public class QuerySplit
     }
 
     /**
-     * Handles the complex query search
+     * Receives the split query string elements and further breaks them down by whitespace.
+     * For example, the function receives 'president USA' and 'queen denmark' and will break these down to 'president',
+     * 'USA', 'queen' and 'denmark'.
      *
-     * @param splitByOr String array that holds all substrings without the " OR " operator
-     * @param index     Index used for searching
-     * @return
+     * The results resulting from each individual query is ranked.
+     *
+     * @param splitByOr String array that holds all substrings without the " OR " operator.
+     * @param index     Index data structure used to hold the Websites and associated words.
+     * @return          A list of ranked websites.
      */
     private static List<Website> evaluateFullQuery(String[] splitByOr, Index index, Score rankingHandler)
     {
@@ -69,6 +77,13 @@ public class QuerySplit
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Searches for websites containing a phrase.
+     *
+     * @param splitBySpace String array representing the query split by whitespace.
+     * @param index        The index data structure holding the Websites and associated words.
+     * @return             A list of websites containing the subqueries.
+     */
     private static List<Website> evaluateSubQuery(String[] splitBySpace, Index index)
     {
         //Initialize the list that will hold all search results
@@ -99,6 +114,16 @@ public class QuerySplit
         return resultsToReturn;
     }
 
+    /**
+     * Calculates the ranking of a specific website for a given query.
+     *
+     * @param splitByWhitespace A string array containing individual query words.
+     * @param website           Website to calculate the score for.
+     * @param indexToUse        Index data structure holding the websites and associate words.
+     * @param rankingHandler    Score calculator object.
+     *
+     * @return                  Returns the rank of a specific website relative to a search query.
+     */
     private static double calculateSubqueryRanking(String[] splitByWhitespace, Website website, Index indexToUse, Score rankingHandler) {
         //Initialize the score holder
         double scoreForQuery = 0;
@@ -113,6 +138,16 @@ public class QuerySplit
         return scoreForQuery;
     }
 
+    /**
+     * Updates an index data structure holding the websites and their rank relative to a query. Higher ranks are
+     * overriden in the index data structure.
+     *
+     * @param websiteToUpdate       Website to be handled.
+     * @param newlyCalculatedScore  Score of websiteToUpdate
+     * @param currentMap            Index structure which holds the website and its respective value.
+     *
+     * @return                      A map structure with websites as key and rank as the value.
+     */
     private static Map<Website, Double> updateWebsiteInMap(Website websiteToUpdate, double newlyCalculatedScore, Map<Website, Double> currentMap)
     {
         //Check is the website is already in the ranking map

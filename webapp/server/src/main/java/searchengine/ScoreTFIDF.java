@@ -1,18 +1,30 @@
 package searchengine;
 
 /**
- * Implementation of the score interface that calculates a rank using the
- * Term Frequency - Inverse Document Frequency algorithm
+ * Implementation of the score interface.
+ * Calculates website rank using: Term Frequency - Inverse Document Frequency algorithm
  */
 public class ScoreTFIDF implements Score
 {
     private Index index;
 
+    /**
+     * Constructor stores index data structure.
+     *
+     * @param indexToUse Index data structure to be used.
+     */
     public ScoreTFIDF(Index indexToUse)
     {
         this.index = indexToUse;
     }
 
+    /**
+     * Computes the total score of a website relative to a query.
+     *
+     * @param keyword Query word used to determine the list of websites to be scored.
+     * @param website Website that will have its score calculated.
+     * @return        Number value representing the Website score.
+     */
     public double getScore(String keyword, Website website)
     {
         //Calculate the two different
@@ -27,10 +39,12 @@ public class ScoreTFIDF implements Score
     }
 
     /**
-     * Calculates the term frequency paramater of the website based on the specific keyword
-     * @return The term frequency score of the website
-     * @param keyword Keyword to use to calculate the result for
-     * @param website Website to use when calculating the keyword results
+     * Calculates the term frequency of the website based on the specific query.
+     *
+     * @param keyword Query word.
+     * @param website Website to calculate rank for.
+     *
+     * @return        The term frequency score for the given website.
      */
     private double calculateTermFrequency(String keyword, Website website)
     {
@@ -52,9 +66,11 @@ public class ScoreTFIDF implements Score
     }
 
     /**
-     * Calculates the inverse document frequency of a website based on the specific keyword
-     * @return The inverse document frequency score of the website
-     * @param keyword Keyword to calculate the score based on
+     * Calculates the inverse document frequency score of a website based on a given query.
+     *
+     * @param keyword Given query word.
+     *
+     * @return        Number value representing the Inverse Document Frequency rank.
      */
     private double calculateInverseDocumentFrequency(String keyword)
     {

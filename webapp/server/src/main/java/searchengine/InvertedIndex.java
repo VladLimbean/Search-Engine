@@ -3,7 +3,7 @@ package searchengine;
 import java.util.*;
 
 /**
- * Holds all websites in a Map object
+ * Adds all websites in a Map structure.
  */
 public class InvertedIndex implements Index
 {
@@ -12,8 +12,9 @@ public class InvertedIndex implements Index
     private int websitesCount;
 
     /**
-     * Creates the InvertedIndex object
-     * @param shouldUseHashMap True if HashMap is to be used, false if TreeMap is to be used
+     * Creates the index structure which holds .
+     *
+     * @param shouldUseHashMap True if HashMap is used to index websites; False if TreeMap is used to index websites.
      */
     public InvertedIndex(boolean shouldUseHashMap)
     {
@@ -66,6 +67,12 @@ public class InvertedIndex implements Index
         }
     }
 
+    /**
+     * Searches for a phrase or words within the index and lists the websites it occurs.
+     *
+     * @param query Phrase/word to look-up.
+     * @return A list of websites containing the query.
+     */
     public List<Website> lookup(String query)
     {
         //Check if there is a key in the Map equal to the word we are searching for
@@ -81,13 +88,21 @@ public class InvertedIndex implements Index
         }
     }
 
-    @Override
+    /**
+     * Calculates the number of websites contained in the index.
+     *
+     * @return A number value equal to the number of websites in the index.
+     */
     public int getSize()
     {
         return this.websitesCount;
     }
 
-    @Override
+    /**
+     * Returns a string representation of the Class showing the data type being used by the index.
+     *
+     * @return a string representation of the class and data type used to index the .txt file.
+     */
     public String toString() {
         return this.getClass().toString() + " with " + this.websites.getClass().toString();
     }

@@ -39,7 +39,7 @@ public class SearchEngine extends ResourceConfig
      * argument is the filename of the file containing the
      * websites.
      *
-     * @param args command line arguments.
+     * @param args Command line arguments.
      */
     public static void main(String[] args)
     {
@@ -70,8 +70,8 @@ public class SearchEngine extends ResourceConfig
      * It assumes that a GET request of the form "search?query=word" is made.
      *
      * @param response Http response object
-     * @param query the query string
-     * @return the list of url's of websites matching the query
+     * @param query    The query string
+     * @return         The list of url's of websites matching the query
      */
 
     @GET

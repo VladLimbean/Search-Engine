@@ -12,10 +12,11 @@ public class Website
     private List<String> keywords;
 
     /**
-     * Constructor for creating new website objects
-     * @param url The URL of the website
-     * @param title The title of the website
-     * @param keywords All keywords associated with the website
+     * Constructor for creating new website objects.
+     *
+     * @param url       The URL of the website.
+     * @param title     The title of the website.
+     * @param keywords  All keywords associated with the website.
      */
     public Website(String url, String title, List<String> keywords) throws IllegalArgumentException
     {
@@ -30,8 +31,9 @@ public class Website
     }
 
     /**
-     * Returns the URL of the website
-     * @return the website's URL
+     * Returns the URL of the website.
+     *
+     * @return Website's URL
      */
     public String getUrl()
     {
@@ -39,16 +41,18 @@ public class Website
     }
 
     /**
-     * Returns the title of the website
-     * @return the website's title
+     * Returns the title of the website.
+     *
+     * @return Website's title.
      */
     public String getTitle()
     {
         return this.title;
     }
 
-    /** Returns all keywords of the website
-     * @return the website's keywords
+    /** Returns all keywords of the website.
+     *
+     * @return Keywords of the website.
      */
     public List<String> getKeywords()
     {

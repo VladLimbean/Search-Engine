@@ -4,17 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * SimpleIndex holds all website in a List object
+ * SimpleIndex stores all websites in a List object.
  */
 public class SimpleIndex implements Index
 {
     private List<Website> websites;
 
+    /**
+     * Creates a list of websites in the form of a List object.
+     *
+     * @param websites Website list provided by FileHelper.
+     */
     public void build(List<Website> websites)
     {
         this.websites = websites;
     }
 
+    /**
+     * Searches for a specific string in the built list of websites.
+     *
+     * @param query Phrase/word to look-up.
+     * @return A list of websites containing the query.
+     */
     public List<Website> lookup(String query)
     {
         //Initialize the list that will hold all results
@@ -34,13 +45,21 @@ public class SimpleIndex implements Index
         return results;
     }
 
-    @Override
+    /**
+     * Calculates the number of websites in the list.
+     *
+     * @return Integer representing the number of websites in the list.
+     */
     public int getSize()
     {
         return this.websites.size();
     }
 
-    @Override
+    /**
+     * Returns the name of the used index (SimpleIndex).
+     *
+     * @return name index.
+     */
     public String toString() {
         return this.getClass().toString();
     }
