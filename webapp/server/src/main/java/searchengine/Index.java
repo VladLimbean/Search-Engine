@@ -15,8 +15,8 @@ public interface Index
 
 
     /**
-     * Searches for websites in the saved "index" based on a search phrase
-     * @param query Phrase to search
+     * Searches for websites containing a query provided by user.
+     * @param query Phrase/word to search for
      */
     List<Website> lookup(String query);
 
