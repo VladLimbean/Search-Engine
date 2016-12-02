@@ -23,5 +23,11 @@ public class WikiJson {
     @JsonProperty("fullurl")
     public String fullurl;
 
+    @JsonProperty("links")
+    public JsonWikiLinks[] links;
 
+    public class JsonWikiLinks{
+        @JsonProperty("title")
+        public String title;
+    }
 }
