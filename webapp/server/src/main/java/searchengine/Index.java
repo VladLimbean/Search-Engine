@@ -27,4 +27,12 @@ public interface Index
      * @return The total number of websites.
      */
     int getSize();
+
+    /**
+     * Calculates the average number of words across all websites held withing the index structure
+     *
+     * @return double representation of the average words across all websites
+     */
+    double getAverageWordsCount();
+
 }
