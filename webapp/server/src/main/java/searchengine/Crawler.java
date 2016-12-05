@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
  */
 
 public class Crawler {
+    private Map<String, Integer> crawledSites;
     private Queue<String> titles;
     private final String preURL;
     private final String postURL;
@@ -29,11 +30,14 @@ public class Crawler {
     private final int maxWebsites = 50;
     private PrintWriter saveFile;
 
+
     public Crawler() throws FileNotFoundException {
         File newFile = new File("Data/test.txt");
         saveFile = new PrintWriter(newFile);
         titles = new ArrayDeque<>();
+        crawledSites = new HashMap<>();
         titles.add("Communism");
+        crawledSites.put("Communism" , 0);
         preURL = "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts%7Cinfo%7Clinks&titles=";
         postURL = "&utf8=1&exintro=1&explaintext=1&inprop=url&pllimit=max";
     }
@@ -85,7 +89,12 @@ public class Crawler {
         for(Map.Entry<String, JsonElement> currentLine : jsonObject.entrySet()){
             WikiJson wikiPage = jsonLoader.fromJson(currentLine.getValue(), WikiJson.class);
             for( WikiJson.JsonWikiLinks wikiTitles  : wikiPage.links){
-                titles.offer(wikiTitles.title);
+                if (!crawledSites.containsKey(wikiTitles.title){
+                    titles.offer(wikiTitles.title);
+                    crawledSites.put(wikiTitles.title, 0);
+
+                }
+
             }
             wikiWriter(wikiPage);
         }
