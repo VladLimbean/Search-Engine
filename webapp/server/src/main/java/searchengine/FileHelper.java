@@ -26,6 +26,7 @@ public class FileHelper
         String title = null;
         int wordsCount = 0;
         Map<String, Integer> frequencies = new HashMap<String, Integer>();
+        StringBuilder extract = new StringBuilder();
 
         try
         {
@@ -47,13 +48,14 @@ public class FileHelper
                     //Try to save the previous website and add it to the list first
                     if (canAddWebsite(url, title, frequencies))
                     {
-                        finalList.add(new Website(url, title, frequencies, wordsCount));
+                        finalList.add(new Website(url, title, extract.toString(), frequencies, wordsCount));
                     }
 
                     //Since we are starting a new website, reset all values
                     frequencies = new HashMap<>();
                     wordsCount = 0;
                     title = null;
+                    extract = new StringBuilder();
                     url = currentLine.substring(6);
                 }
                 else if (isLineTitle(title))
@@ -66,6 +68,12 @@ public class FileHelper
                 else
                 {
                     //This line is a keyword, because both URL and title are already set
+
+                    if (extract.length() < 180)
+                    {
+                        extract.append(currentLine);
+                        extract.append(" ");
+                    }
 
                     //Add the current line as a keyword (make sure it's all lower case)
                     String lowerCaseWord = currentLine.toLowerCase();
@@ -88,7 +96,7 @@ public class FileHelper
             //However, we need to add the last website in the .txt file
             if (canAddWebsite(url, title, frequencies))
             {
-                finalList.add(new Website(url, title, frequencies, wordsCount));
+                finalList.add(new Website(url, title, extract.toString(), frequencies, wordsCount));
             }
         }
         catch (FileNotFoundException e)

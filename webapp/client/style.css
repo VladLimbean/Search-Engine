@@ -19,3 +19,71 @@ input[type="text"].focus {
     box-shadow: 0 0 5px 1px #969696;
 }
 
+div {
+	display: block;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:link {
+	cursor: pointer;
+	color: #1a0dab;
+} 
+
+a:visited {
+	color: #609;
+}
+
+h3.r {
+	white-space: nowrap;
+	font-size: 18px;
+	font-weight: normal;
+	font-family: arial,sans-serif;
+	display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+	font-weight: normal;
+    margin: 0;   
+	padding: 0;
+}
+
+.g {
+	line-height: 1.2;
+    text-align: left;    
+	font-size: small;
+    font-family: arial,sans-serif;
+}
+
+.s {
+	line-height: 18px;
+	color: #545454;
+	max-width: 48em;
+}
+
+.f {
+	height: 18px;
+    line-height: 16px;    
+	color: #808080;
+	display: block;
+    font-weight: normal;
+}
+
+.Rm {
+	font-size: 14px;
+	color: #006621;
+    font-style: normal;    
+	line-height: 16px;
+}
+
+.st {
+	line-height: 1.4;
+    word-wrap: break-word;    
+	color: #545454;
+}
+
+.g {
+	margin-top: 0;
+    margin-bottom: 26px;
+}
