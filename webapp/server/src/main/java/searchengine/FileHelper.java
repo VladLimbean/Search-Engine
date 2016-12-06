@@ -2,9 +2,8 @@ package searchengine;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.net.MalformedURLException;
+import java.util.*;
 
 /**
  * The class reads a .txt file and creates a list of websites based on its content.
@@ -25,7 +24,8 @@ public class FileHelper
         //Initialize the variables that hold the website's information
         String url = null;
         String title = null;
-        List<String> wordList = new ArrayList<>();
+        int wordsCount = 0;
+        Map<String, Integer> frequencies = new HashMap<String, Integer>();
 
         try
         {
@@ -45,13 +45,14 @@ public class FileHelper
 
                     //This means that we are starting a new website from here on out
                     //Try to save the previous website and add it to the list first
-                    if (canAddWebsite(url, title, wordList))
+                    if (canAddWebsite(url, title, frequencies))
                     {
-                        finalList.add(new Website(url, title, wordList));
+                        finalList.add(new Website(url, title, frequencies, wordsCount));
                     }
 
                     //Since we are starting a new website, reset all values
-                    wordList = new ArrayList<>();
+                    frequencies = new HashMap<>();
+                    wordsCount = 0;
                     title = null;
                     url = currentLine.substring(6);
                 }
@@ -67,15 +68,27 @@ public class FileHelper
                     //This line is a keyword, because both URL and title are already set
 
                     //Add the current line as a keyword (make sure it's all lower case)
-                    wordList.add(currentLine.toLowerCase());
+                    String lowerCaseWord = currentLine.toLowerCase();
+
+                    //The amount of times the word is seen so far is calculated
+                    int counter = 1;
+                    if (frequencies.containsKey(lowerCaseWord))
+                    {
+                        counter = frequencies.get(lowerCaseWord) + 1;
+                    }
+
+                    //The frequencies map is updated with the new count of the word
+                    frequencies.put(lowerCaseWord, counter);
+
+                    wordsCount++;
                 }
             }
 
             //The scanner loop finished
             //However, we need to add the last website in the .txt file
-            if (canAddWebsite(url, title, wordList))
+            if (canAddWebsite(url, title, frequencies))
             {
-                finalList.add(new Website(url, title, wordList));
+                finalList.add(new Website(url, title, frequencies, wordsCount));
             }
         }
         catch (FileNotFoundException e)
@@ -83,7 +96,7 @@ public class FileHelper
             //Throw an exception if something wrong happens
             e.printStackTrace();
         }
-        catch (IllegalArgumentException e)
+        catch (MalformedURLException e)
         {
             //Throw an exception if something wrong happens when creating website objects
             e.printStackTrace();
@@ -123,7 +136,7 @@ public class FileHelper
      * @param keywords The current value of the keywords list variable.
      * @return True if a new website can be added.
      */
-    private static boolean canAddWebsite(String url, String title, List<String> keywords)
+    private static boolean canAddWebsite(String url, String title, Map<String, Integer> keywords)
     {
         return (url != null && title != null && keywords.size() > 0);
     }

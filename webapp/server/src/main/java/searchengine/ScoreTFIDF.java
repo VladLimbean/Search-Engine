@@ -28,7 +28,7 @@ public class ScoreTFIDF implements Score
     public double getScore(String keyword, Website website)
     {
         //Calculate the two different
-        double termFrequency = calculateTermFrequency(keyword, website);
+        double termFrequency = website.getTermFrequency(keyword);
         double inverseDocFrequency = calculateInverseDocumentFrequency(keyword);
 
         //Multiply them to get the final score of the website
@@ -36,33 +36,6 @@ public class ScoreTFIDF implements Score
 
         //Return the final score
         return totalScore;
-    }
-
-    /**
-     * Calculates the term frequency of the website based on the specific query.
-     *
-     * @param keyword Query word.
-     * @param website Website to calculate rank for.
-     *
-     * @return        The term frequency score for the given website.
-     */
-    private double calculateTermFrequency(String keyword, Website website)
-    {
-        //Initialize a counter
-        int counter = 0;
-
-        //Go through all words in the websites' list of keywords
-        for(String word : website.getKeywords())
-        {
-            //Increment the counter when the keyword matches the word in the list
-            if(word.equals(keyword))
-            {
-                counter++;
-            }
-        }
-
-        //Return the final term frequency
-        return counter;
     }
 
     /**

@@ -21,25 +21,6 @@ public class ScoreBM25 implements Score {
         return bm25;
     }
 
-    public double termFrequency(String query, Website website)
-    {
-        //Initialize a counter
-        int counter = 0;
-
-        //Go through all words in the websites' list of keywords
-        for(String word : website.getKeywords())
-        {
-            //Increment the counter when the keyword matches the word in the list
-            if(word.equals(query))
-            {
-                counter++;
-            }
-        }
-
-        //Return the final term frequency
-        return counter;
-    }
-
     public double inverseTermFrequency(String query)
     {
         //Get the total number of websites
@@ -64,8 +45,8 @@ public class ScoreBM25 implements Score {
         double k = 1.75;
         double b = 0.75;
 
-        double TF = termFrequency(query, website);
-        double words = website.getKeywords().size()/index.getAverageWordsCount();
+        double TF = website.getTermFrequency(query);
+        double words = website.getWordsCount()/index.getAverageWordsCount();
         double div = k*(1-b + (b*words)) + TF;
 
         double result = TF * (k+1)/ div;

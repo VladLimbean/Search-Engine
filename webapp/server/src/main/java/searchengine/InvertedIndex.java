@@ -38,11 +38,11 @@ public class InvertedIndex implements Index
         //Go through every website in the list
         for (Website website : websites)
         {
-            // calculates number of words for every website
-            numberOfWords += website.getKeywords().size();
+            //Sums the number of words for every website
+            numberOfWords += website.getWordsCount();
 
             //Go through every keyword in the website
-            for (String word : website.getKeywords())
+            for (String word : website.getAllFrequencies().keySet())
             {
                 //Create an empty list of websites (the value type of the Map)
                 List<Website> emptyList;

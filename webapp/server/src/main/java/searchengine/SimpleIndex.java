@@ -35,7 +35,7 @@ public class SimpleIndex implements Index
         for (Website w : websites)
         {
             //If the specific website contains the query, add the website to the list of results
-            if (w.getKeywords().contains(query))
+            if (w.getTermFrequency(query) > 0)
             {
                 results.add(w);
             }
@@ -69,10 +69,12 @@ public class SimpleIndex implements Index
      *
      * @return an integer representing average number of words relative to all websites
      */
-    public double getAverageWordsCount(){
+    public double getAverageWordsCount()
+    {
         double result = 0;
-        for (Website w : websites){
-            result += w.getKeywords().size();
+        for (Website w : websites)
+        {
+            result += w.getWordsCount();
         }
         return result/websites.size();
     }
