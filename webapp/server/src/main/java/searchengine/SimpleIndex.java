@@ -63,4 +63,17 @@ public class SimpleIndex implements Index
     public String toString() {
         return this.getClass().toString();
     }
+
+    /**
+     * Calculates all words in the entire list of websites and provides the average
+     *
+     * @return an integer representing average number of words relative to all websites
+     */
+    public double getAverageWordsCount(){
+        double result = 0;
+        for (Website w : websites){
+            result += w.getKeywords().size();
+        }
+        return result/websites.size();
+    }
 }
