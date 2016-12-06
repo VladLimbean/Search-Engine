@@ -1,5 +1,6 @@
 package searchengine;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -10,6 +11,7 @@ public class Website
     private String url;
     private String title;
     private List<String> keywords;
+    private HashMap<String, Integer> wordFreqIndex;
 
     /**
      * Constructor for creating new website objects.
@@ -28,6 +30,9 @@ public class Website
         this.url = url;
         this.title = title;
         this.keywords = keywords;
+        this.wordFreqIndex = new HashMap<>();
+
+        buildWordFrequencyMap();
     }
 
     /**
@@ -57,5 +62,28 @@ public class Website
     public List<String> getKeywords()
     {
         return this.keywords;
+    }
+
+    public int getWordFreq(String keyWord){
+        if (wordFreqIndex.containsKey(keyWord))
+        {
+            return wordFreqIndex.get(keyWord);
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    public void buildWordFrequencyMap(){
+        for(String word : keywords){
+            if (!wordFreqIndex.containsKey(word))
+            {
+                wordFreqIndex.put(word, 1);
+            }
+            else
+            {
+                wordFreqIndex.put(word, wordFreqIndex.get(word) + 1);
+            }
+        }
     }
 }

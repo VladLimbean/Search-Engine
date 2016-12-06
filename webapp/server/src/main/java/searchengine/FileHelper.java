@@ -3,6 +3,7 @@ package searchengine;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -47,7 +48,7 @@ public class FileHelper
                     //Try to save the previous website and add it to the list first
                     if (canAddWebsite(url, title, wordList))
                     {
-                        finalList.add(new Website(url, title, wordList));
+                        finalList.add( new Website(url, title, wordList));
                     }
 
                     //Since we are starting a new website, reset all values

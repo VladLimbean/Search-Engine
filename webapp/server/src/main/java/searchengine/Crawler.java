@@ -89,7 +89,7 @@ public class Crawler {
         for(Map.Entry<String, JsonElement> currentLine : jsonObject.entrySet()){
             WikiJson wikiPage = jsonLoader.fromJson(currentLine.getValue(), WikiJson.class);
             for( WikiJson.JsonWikiLinks wikiTitles  : wikiPage.links){
-                if (!crawledSites.containsKey(wikiTitles.title){
+                if (!crawledSites.containsKey(wikiTitles.title)){
                     titles.offer(wikiTitles.title);
                     crawledSites.put(wikiTitles.title, 0);
 
