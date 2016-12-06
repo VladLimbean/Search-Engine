@@ -21,8 +21,9 @@ import java.util.regex.Pattern;
  * it's exception-tastic
  */
 
-public class Crawler {
-    private Map<String, Integer> crawledSites;
+public class Crawler
+{
+    private Set<String> crawledSites;
     private Queue<String> titles;
     private final String preURL;
     private final String postURL;
@@ -35,9 +36,9 @@ public class Crawler {
         File newFile = new File("Data/test.txt");
         saveFile = new PrintWriter(newFile);
         titles = new ArrayDeque<>();
-        crawledSites = new HashMap<>();
+        crawledSites = new HashSet<>();
         titles.add("Communism");
-        crawledSites.put("Communism" , 0);
+        crawledSites.add("Communism");
         preURL = "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts%7Cinfo%7Clinks&titles=";
         postURL = "&utf8=1&exintro=1&explaintext=1&inprop=url&pllimit=max";
     }
@@ -89,12 +90,11 @@ public class Crawler {
         for(Map.Entry<String, JsonElement> currentLine : jsonObject.entrySet()){
             WikiJson wikiPage = jsonLoader.fromJson(currentLine.getValue(), WikiJson.class);
             for( WikiJson.JsonWikiLinks wikiTitles  : wikiPage.links){
-                if (!crawledSites.containsKey(wikiTitles.title){
+                if (!crawledSites.contains(wikiTitles.title)
+                {
                     titles.offer(wikiTitles.title);
-                    crawledSites.put(wikiTitles.title, 0);
-
+                    crawledSites.add(wikiTitles.title);
                 }
-
             }
             wikiWriter(wikiPage);
         }
