@@ -1,5 +1,6 @@
 package searchengine;
 
+import org.eclipse.jetty.websocket.server.WebSocketHandler;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -54,6 +55,7 @@ public class SearchEngine extends ResourceConfig {
 
         indexInverted = new InvertedIndex(new TreeMap<>());
         indexInverted.build(list);
+
 
         // Later: Build the index from this list.
         SpringApplication.run(SearchEngine.class, args);

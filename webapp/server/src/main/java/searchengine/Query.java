@@ -32,4 +32,5 @@ public class Query {
         }
         return splitByOrWebsites;
     }
+
 }

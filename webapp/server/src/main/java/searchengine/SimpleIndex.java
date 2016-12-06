@@ -15,7 +15,7 @@ public class SimpleIndex implements Index {
 
     @Override
     public void build(List<Website> listWebsite) {
-        this.listOfWebsite = listWebsite;
+        this.listOfWebsite   = listWebsite;
         }
 
     @Override
