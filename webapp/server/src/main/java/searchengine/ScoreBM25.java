@@ -5,38 +5,43 @@ package searchengine;
  */
 public class ScoreBM25 implements Score {
 
-    public Index index;
+    private Index index;
+    private double inverseDocumentFrequency;
 
-    public ScoreBM25(Index index){
-        this.index = index;
-    }
-
-    public double getScore(String query, Website website){
-
-        double invertedTermFrequency = inverseTermFrequency(query);
-        double termFrequencyStar = termFrequencyStar(query, website);
-
-        double bm25 = termFrequencyStar * invertedTermFrequency;
-
-        return bm25;
-    }
-
-    public double inverseTermFrequency(String query)
+    public ScoreBM25(Index index)
     {
-        //Get the total number of websites
-        int numberOfWebsites = index.getSize();
-        //Get the total number of websites
-        int numberOfMatches = index.lookup(query).size();
+        this.index = index;
+        this.inverseDocumentFrequency = 0;
+    }
 
-        //If the denominator is 0, the inverse document frequency cannot be calculated
-        if (numberOfMatches == 0)
+    public double getScore(String query, Website website)
+    {
+        if (this.inverseDocumentFrequency == 0)
         {
             return 0;
         }
 
-        double result = Math.log10((double)numberOfWebsites / (double)numberOfMatches) / Math.log10(2);
+        double termFrequencyStar = termFrequencyStar(query, website);
 
-        return result;
+        double bm25 = termFrequencyStar * this.inverseDocumentFrequency;
+
+        return bm25;
+    }
+
+    @Override
+    public void calculateInverseDocumentFrequency(String keyword, int numberOfResults)
+    {
+        //If the denominator is 0, the inverse document frequency cannot be calculated
+        if (numberOfResults == 0)
+        {
+            this.inverseDocumentFrequency = 0;
+        }
+
+        //Get the total number of websites
+        int numberOfWebsites = index.getSize();
+
+        this.inverseDocumentFrequency =
+                Math.log10((double)numberOfWebsites / (double)numberOfResults) / Math.log10(2);
     }
 
     public double termFrequencyStar(String query, Website website)

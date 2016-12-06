@@ -64,7 +64,7 @@ public class QuerySplit
             for (Website w : partialResults)
             {
                 //Calculate the ranking score of the website
-                double scoreForQuery = calculateSubqueryRanking(splitBySpace, w, index, rankingHandler);
+                double scoreForQuery = calculateSubqueryRanking(splitBySpace, w, partialResults.size(), rankingHandler);
 
                 //Update the ranking map based on the score that was just calculated
                 rankingMap = updateWebsiteInMap(w, scoreForQuery, rankingMap);
@@ -132,19 +132,21 @@ public class QuerySplit
      *
      * @param splitByWhitespace A string array containing individual query words.
      * @param website           Website to calculate the score for.
-     * @param indexToUse        Index data structure holding the websites and associate words.
+     * @param numberOfResults   Total amount of results found for the specific subquery
      * @param rankingHandler    Score calculator object.
      *
      * @return                  Returns the rank of a specific website relative to a search query.
      */
-    private static double calculateSubqueryRanking(String[] splitByWhitespace, Website website, Index indexToUse, Score rankingHandler) {
+    private static double calculateSubqueryRanking(String[] splitByWhitespace, Website website, int numberOfResults, Score rankingHandler) {
         //Initialize the score holder
         double scoreForQuery = 0;
 
         //Increment the score of the subquery for each string in it
         for (String substring : splitByWhitespace)
         {
-            scoreForQuery += rankingHandler.getScore(substring.toLowerCase(), website);
+            String toLowerCase = substring.toLowerCase();
+            rankingHandler.calculateInverseDocumentFrequency(toLowerCase, numberOfResults);
+            scoreForQuery += rankingHandler.getScore(toLowerCase, website);
         }
 
         //Return the final score of the whole query

@@ -9,6 +9,7 @@ import java.util.List;
 public class SimpleIndex implements Index
 {
     private List<Website> websites;
+    private double averageNumberOfWords;
 
     /**
      * Creates a list of websites in the form of a List object.
@@ -18,6 +19,13 @@ public class SimpleIndex implements Index
     public void build(List<Website> websites)
     {
         this.websites = websites;
+
+        int totalWords = 0;
+        for (Website w : this.websites)
+        {
+            totalWords += w.getWordsCount();
+        }
+        this.averageNumberOfWords = totalWords / this.websites.size();
     }
 
     /**
@@ -71,11 +79,6 @@ public class SimpleIndex implements Index
      */
     public double getAverageWordsCount()
     {
-        double result = 0;
-        for (Website w : websites)
-        {
-            result += w.getWordsCount();
-        }
-        return result/websites.size();
+        return this.averageNumberOfWords;
     }
 }
