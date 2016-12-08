@@ -144,7 +144,7 @@ public class Main extends ResourceConfig {
                     .trim();
 
             listToReturn.add("<br><a href=\"" + w.getUrl() + "\" class=\"red-text text-lighten-2\"><h4>" + w.getTitle() + "</h4></a>");
-            listToReturn.add ("<b class=\"red-text text-lighten-3\">Dexcription: </b>" + "..." + w.getTitle() + " " +arrayToString + "...");
+            listToReturn.add ("<b class=\"red-text text-lighten-3\">Description: </b>" + "..." + w.getTitle() + " " +arrayToString + "...");
             listToReturn.add("<b class=\"red-text text-lighten-3\">Full Source URL: </b><a href=\"" + w.getUrl() + "\">" + w.getUrl() + "</a></p>");
             listToReturn.add("</p>");
 
