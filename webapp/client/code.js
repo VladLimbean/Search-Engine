@@ -1,4 +1,3 @@
-
 $(document).ready(function() {
     var baseUrl = "http://localhost:8080";
 
@@ -11,19 +10,21 @@ $(document).ready(function() {
         }).success( function (data) { 
             console.log("Received response " + data);
 			
-            $("#responsesize").html("<p>" + data.time + "</p>");
-            buffer = "<div>";
+            $("#responsesize").html("<p>" + data.websites.length + " results found in " + data.time + " ms</p>");
+            buffer = "<div class=\"results-container\">";
             $.each(data.websites, function(index, value) {
-				buffer += "<div class=\"g\"><div class=\"rc\">";
+				buffer += "<div class=\"result-entry\">";
 				
 				//Heading
-				buffer += "<h3 class=\"r\"><a href=\"" + value.url + "\">" + value.title + "</a></h3>";
+				buffer += "<a class=\"red-text\" href=\"" + value.url + "\"><h3>" + value.title + "</h3></a>";
                 
-				//URL and extract
-				buffer += "<div class=\"s\"><div><div class=\"f kv _SWb\"><cite class=\"Rm\"><b>" 
-						  + value.url + "</b></cite></div><span class=\"st\">" + value.extract + "</span></div></div>";
+				//URL
+				buffer += "<div class=\"link-text\"><a href=\"" + value.url + "\">" + value.url + "</a></div>";
+
+				//Extracts
+				buffer += "<span>" + value.extract + "</span>";
 				
-				buffer += "</div></div>";
+				buffer += "</div>";
             });
             buffer += "</div>";
             $("#urllist").html(buffer);

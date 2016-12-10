@@ -102,7 +102,7 @@ public class SearchEngine extends ResourceConfig
 
         SearchResultsHolder results = new SearchResultsHolder(searchTime, resultList);
 
-        System.out.println(results.getTime());
+        System.out.printf("Found %s results in %s ns \n", resultList.size(), searchTime);
 
         //Return the final list
         return gson.toJson(results);
