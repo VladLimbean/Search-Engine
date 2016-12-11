@@ -10,6 +10,7 @@ $(document).ready(function() {
 		}
 		
         console.log("Sending request to server.");
+		var start = new Date();
         $.ajax({
             method: "GET",
             url: baseUrl + "/search",
@@ -17,15 +18,17 @@ $(document).ready(function() {
         }).success( function (data) { 
             console.log("Received response " + data);
 			
-            $("#responsesize").html("<p>" + data.websites.length + " results found in " + data.time + " ms</p>");
+			var totalTime = new Date() - start;
 			
-			if (data.websites.length == 0) {
+            $("#responsesize").html("<p>" + data.length + " results found in " + totalTime + " ms</p>");
+			
+			if (data.length == 0) {
 				$("#urllist").html("");
 				return;
 			}
 			
             buffer = "<div class=\"results-container\">";
-            $.each(data.websites, function(index, value) {
+            $.each(data, function(index, value) {
 				buffer += "<div class=\"result-entry\">";
 				
 				//Heading
