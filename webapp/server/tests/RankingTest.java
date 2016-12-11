@@ -36,9 +36,14 @@ public class RankingTest
     public void testAmerica() throws Exception
     {
         List<Website> americaTest =
-                QuerySplit.getMatchingWebsites("america", this.index, this.rankingHandler);
+                this.index.lookup("america");
         assertEquals(1, americaTest.size());
         assertEquals("United States", americaTest.get(0).getTitle());
+        this.rankingHandler.calculateInverseDocumentFrequency("america", americaTest.size());
+        //Score for BM25
+        assertEquals(2.626865671641791, this.rankingHandler.getScore("america", americaTest.get(0)), 1e-15);
+        //Score for TFIDF
+        //assertEquals(2, this.rankingHandler.getScore("america", americaTest.get(0)), 1e-15);
     }
 
     @Test

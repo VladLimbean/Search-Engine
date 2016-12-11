@@ -3,13 +3,18 @@ package searchengine;
 /**
  * This class computes the BM25 ranking algorithm for our search engine.
  */
-public class ScoreBM25 implements Score {
+public class ScoreBM25 implements Score
+{
+    private final double kMultiplier = 1.75;
+    private final double bMultiplier = 0.75;
+    private final double logOfTwo;
 
     private Index index;
     private double inverseDocumentFrequency;
 
     public ScoreBM25(Index index)
     {
+        this.logOfTwo = Math.log10(2);
         this.index = index;
         this.inverseDocumentFrequency = 0;
     }
@@ -41,20 +46,17 @@ public class ScoreBM25 implements Score {
         int numberOfWebsites = index.getSize();
 
         this.inverseDocumentFrequency =
-                Math.log10((double)numberOfWebsites / (double)numberOfResults) / Math.log10(2);
+                Math.log10((double)numberOfWebsites / (double)numberOfResults) / this.logOfTwo;
     }
 
     public double termFrequencyStar(String query, Website website)
     {
-        //defining equation constants
-        double k = 1.75;
-        double b = 0.75;
-
-        double TF = website.getTermFrequency(query);
+        double termFrequency = website.getTermFrequency(query);
         double words = website.getWordsCount()/index.getAverageWordsCount();
-        double div = k*(1-b + (b*words)) + TF;
 
-        double result = TF * (k+1)/ div;
+        double div = kMultiplier * (1 - bMultiplier + (bMultiplier * words)) + termFrequency;
+
+        double result = termFrequency * (kMultiplier + 1) / div;
 
         return result;
     }
