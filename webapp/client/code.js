@@ -20,6 +20,7 @@ $(document).ready(function() {
             $("#responsesize").html("<p>" + data.websites.length + " results found in " + data.time + " ms</p>");
 			
 			if (data.websites.length == 0) {
+				$("#urllist").html("");
 				return;
 			}
 			
