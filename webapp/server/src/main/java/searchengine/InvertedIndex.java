@@ -10,6 +10,7 @@ public class InvertedIndex implements Index
     private Map<String, List<Website>> websites;
 
     private int websitesCount;
+    private double averageWordsCount;
 
     /**
      * Creates the index structure which holds .
@@ -33,12 +34,15 @@ public class InvertedIndex implements Index
     public void build(List<Website> websites)
     {
         this.websitesCount = websites.size();
-
+        int numberOfWords = 0;
         //Go through every website in the list
         for (Website website : websites)
         {
+            //Sums the number of words for every website
+            numberOfWords += website.getWordsCount();
+
             //Go through every keyword in the website
-            for (String word : website.getKeywords())
+            for (String word : website.getAllFrequencies().keySet())
             {
                 //Create an empty list of websites (the value type of the Map)
                 List<Website> emptyList;
@@ -64,6 +68,8 @@ public class InvertedIndex implements Index
                 //Creates a new key in the Map or updates the old one, after adding the current website
                 this.websites.put(word, emptyList);
             }
+            // calculates the average number of words across all websites
+            averageWordsCount = numberOfWords / websitesCount;
         }
     }
 
@@ -105,5 +111,14 @@ public class InvertedIndex implements Index
      */
     public String toString() {
         return this.getClass().toString() + " with " + this.websites.getClass().toString();
+    }
+
+    /**
+     * Calculates the average amount of words across all websites
+     *
+     * @return  double representation of the average number of words
+     */
+    public double getAverageWordsCount(){
+        return averageWordsCount;
     }
 }

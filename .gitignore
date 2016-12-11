@@ -4,7 +4,6 @@
 .mtj.tmp/
 
 # Package Files #
- 
 *.war
 *.ear
 
@@ -13,6 +12,7 @@ hs_err_pid*
 
 # .idea folder and IntelliJ files
 .idea/
+*.iml
 Group-C.iml
 webapp/server/data/*.txt
 webapp/server/target/

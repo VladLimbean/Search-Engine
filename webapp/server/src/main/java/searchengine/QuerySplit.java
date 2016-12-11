@@ -1,5 +1,7 @@
 package searchengine;
 
+import javafx.util.Pair;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,13 +60,15 @@ public class QuerySplit
             String[] splitBySpace = fullquery.split(" ");
 
             //Execute the search for each specific keyword
-            List<Website> partialResults = evaluateSubQuery(splitBySpace, index);
+            Pair<List<Website>, int[]> partialResults = evaluateSubQuery(splitBySpace, index);
+            List<Website> partialResultsList = partialResults.getKey();
+            int[] resultsCount = partialResults.getValue();
 
             //Add all results in the final list, if they are not already there
-            for (Website w : partialResults)
+            for (Website w : partialResultsList)
             {
                 //Calculate the ranking score of the website
-                double scoreForQuery = calculateSubqueryRanking(splitBySpace, w, index, rankingHandler);
+                double scoreForQuery = calculateSubqueryRanking(splitBySpace, w, resultsCount, rankingHandler);
 
                 //Update the ranking map based on the score that was just calculated
                 rankingMap = updateWebsiteInMap(w, scoreForQuery, rankingMap);
@@ -84,13 +88,16 @@ public class QuerySplit
      * @param index        The index data structure holding the Websites and associated words.
      * @return             A list of websites containing the subqueries.
      */
-    private static List<Website> evaluateSubQuery(String[] splitBySpace, Index index)
+    private static Pair<List<Website>, int[]> evaluateSubQuery(String[] splitBySpace, Index index)
     {
         //Initialize the list that will hold all search results
         List<Website> resultsToReturn = null;
+        int[] resultsPerWord = new int[splitBySpace.length];
 
-        for (String subquery : splitBySpace)
+        for (int i = 0; i < splitBySpace.length; i++)
         {
+            String subquery = splitBySpace[i];
+
             //Check if the subquery is an empty string
             if (subquery.isEmpty())
             {
@@ -100,6 +107,9 @@ public class QuerySplit
 
             //Search for the subquery
             List<Website> partialResults = index.lookup(subquery.toLowerCase());
+
+            //Save the number of results that this word has
+            resultsPerWord[i] = partialResults.size();
 
             //If the resultsToReturn list is null, that means we are in the first iteration of the loop
             if (resultsToReturn == null)
@@ -124,7 +134,7 @@ public class QuerySplit
         }
         
         //Return the final list of results for the subquery
-        return resultsToReturn;
+        return new Pair<>(resultsToReturn, resultsPerWord);
     }
 
     /**
@@ -132,19 +142,21 @@ public class QuerySplit
      *
      * @param splitByWhitespace A string array containing individual query words.
      * @param website           Website to calculate the score for.
-     * @param indexToUse        Index data structure holding the websites and associate words.
+     * @param numberOfResults   Total amount of results found for the specific subquery
      * @param rankingHandler    Score calculator object.
      *
      * @return                  Returns the rank of a specific website relative to a search query.
      */
-    private static double calculateSubqueryRanking(String[] splitByWhitespace, Website website, Index indexToUse, Score rankingHandler) {
+    private static double calculateSubqueryRanking(String[] splitByWhitespace, Website website, int[] numberOfResults, Score rankingHandler) {
         //Initialize the score holder
         double scoreForQuery = 0;
 
         //Increment the score of the subquery for each string in it
-        for (String substring : splitByWhitespace)
+        for (int i = 0; i < splitByWhitespace.length; i++)
         {
-            scoreForQuery += rankingHandler.getScore(substring.toLowerCase(), website);
+            String toLowerCase = splitByWhitespace[i].toLowerCase();
+            rankingHandler.calculateInverseDocumentFrequency(toLowerCase, numberOfResults[i]);
+            scoreForQuery += rankingHandler.getScore(toLowerCase, website);
         }
 
         //Return the final score of the whole query

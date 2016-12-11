@@ -33,10 +33,10 @@ public class FileHelperErrorTest
 
         assertEquals("Title", this.parsedList.get(0).getTitle());
         assertEquals("https://thisshouldwork.com", this.parsedList.get(0).getUrl());
-        assertEquals("word1", this.parsedList.get(0).getKeywords().get(0));
+        assertEquals(1, this.parsedList.get(0).getTermFrequency("word1"));
 
         assertEquals("Japan", this.parsedList.get(1).getTitle());
         assertEquals("https://en.wikipedia.org/wiki/Japan", this.parsedList.get(1).getUrl());
-        assertEquals(13, this.parsedList.get(1).getKeywords().size());
+        assertEquals(13, this.parsedList.get(1).getWordsCount());
     }
 }

@@ -7,6 +7,7 @@ import searchengine.*;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -37,25 +38,25 @@ public class FileHelperTest
         Website first = this.parsedList.get(0);
         assertEquals(first.getUrl(), "https://en.wikipedia.org/wiki/United_States");
         assertEquals(first.getTitle(), "United States");
-        assertEquals(first.getKeywords().size(), 5);
-        List<String> firstWords = first.getKeywords();
-        assertEquals(firstWords.get(0), "the");
-        assertEquals(firstWords.get(4), "america");
+        assertEquals(first.getWordsCount(), 5);
+        Map<String, Integer> firstWords = first.getAllFrequencies();
+        assertTrue(firstWords.get("the") > 0);
+        assertTrue(firstWords.get("america") > 0);
 
         Website second = this.parsedList.get(1);
         assertEquals(second.getUrl(), "https://en.wikipedia.org/wiki/Denmark");
         assertEquals(second.getTitle(), "Denmark");
-        assertEquals(second.getKeywords().size(), 7);
-        List<String> secondWords = second.getKeywords();
-        assertEquals(secondWords.get(0), "denmark");
-        assertEquals(secondWords.get(6), "europe");
+        assertEquals(second.getWordsCount(), 12);
+        Map<String, Integer> secondWords = second.getAllFrequencies();
+        assertTrue(secondWords.get("denmark") > 0);
+        assertTrue(secondWords.get("europe") > 0);
 
         Website third = this.parsedList.get(2);
         assertEquals(third.getUrl(), "https://en.wikipedia.org/wiki/Japan");
         assertEquals(third.getTitle(), "Japan");
-        assertEquals(third.getKeywords().size(), 13);
-        List<String> thirdWords = third.getKeywords();
-        assertEquals(thirdWords.get(0), "japan");
-        assertEquals(thirdWords.get(12), "ocean");
+        assertEquals(third.getWordsCount(), 15);
+        Map<String, Integer> thirdWords = third.getAllFrequencies();
+        assertTrue(thirdWords.get("japan") > 0);
+        assertTrue(thirdWords.get("ocean") > 0);
     }
 }

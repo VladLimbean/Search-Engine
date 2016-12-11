@@ -13,4 +13,6 @@ public interface Score
      * @return        The score of the website for the given query.
      */
     double getScore(String keyword, Website website);
+
+    void calculateInverseDocumentFrequency(String keyword, int numberOfResults);
 }
