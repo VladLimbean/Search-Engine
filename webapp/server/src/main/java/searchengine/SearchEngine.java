@@ -1,5 +1,6 @@
 package searchengine;
 
+import com.google.gson.Gson;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,6 +29,7 @@ public class SearchEngine extends ResourceConfig
 {
     private static Index index;
     private static Score rankingHandler;
+    private static Gson gson;
 
     public SearchEngine() {
         packages("searchengine");
@@ -61,6 +63,8 @@ public class SearchEngine extends ResourceConfig
         //Create the ranking handler
         rankingHandler = new ScoreTFIDF(index);
 
+        gson = new Gson();
+
         // Later: Build the index from this list.
         SpringApplication.run(SearchEngine.class, args);
     }
@@ -77,32 +81,30 @@ public class SearchEngine extends ResourceConfig
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("search")
-    public List<String> search(@Context HttpServletResponse response, @QueryParam("query") String query)
+    public String search(@Context HttpServletResponse response, @QueryParam("query") String query)
     {
         // Set crossdomain access. Otherwise your browser will complain that it does not want
         // to load code from a different location.
         response.setHeader("Access-Control-Allow-Origin", "*");
 
-        if (query == null)
+        if (query == null || query.isEmpty())
         {
-            return new ArrayList<String>();
+            SearchResultsHolder empty = new SearchResultsHolder(0, new ArrayList<>());
+            return gson.toJson(empty);
         }
 
         System.out.println("Handling request for query word \"" + query + "\"");
 
+        long startTime = System.nanoTime();
         //Search for the query in the list of websites.
         List<Website> resultList = QuerySplit.getMatchingWebsites(query, index, rankingHandler);
+        long searchTime = System.nanoTime() - startTime;
 
-        //Create the string list that will be returned by the method
-        List<String> listToReturn = new ArrayList<>();
-        for (Website w : resultList)
-        {
-            listToReturn.add(w.getUrl());
-        }
+        SearchResultsHolder results = new SearchResultsHolder(searchTime, resultList);
 
-        System.out.println("Found " + listToReturn.size() + " websites.");
+        System.out.printf("Found %s results in %s ns \n", resultList.size(), searchTime);
 
         //Return the final list
-        return listToReturn;
+        return gson.toJson(results);
     }
 }

@@ -33,7 +33,7 @@ public class WebsiteTest
         freq.put("copenhagen", 1);
 
         this.keywordsToTest = freq;
-        this.websiteToTest = new Website(url, title, freq, 5);
+        this.websiteToTest = new Website(url, title, "", freq, 5);
     }
 
     @After
@@ -51,7 +51,7 @@ public class WebsiteTest
     @Test(expected = MalformedURLException.class)
     public void tryFakeUrlTest() throws Exception
     {
-        Website fakeWebsite = new Website("fakeurl", "title", new HashMap<>(), 0);
+        Website fakeWebsite = new Website("fakeurl", "title", "", new HashMap<>(), 0);
     }
 
     @Test

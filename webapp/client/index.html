@@ -2,19 +2,34 @@
 <html>
 <head>
     <title>Programming Workshop Search Engine</title>
-    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="code.js"></script>
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" type="text/javascript"></script>
+    <script src="code.js" type="text/javascript"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="content">
-        <h1>My Search Engine</h1>
-        <input id="searchbox" type="text" placeholder="Search here..." />
-        <button id="searchbutton">Search</button>
+	<!-- Search wrapper -->
+	<div id="content-search" class="center red-text">
+		<!--<h1>Gulagle</h1>-->
+		<img src="logo.png" />
+		<div>
+			<input id="searchbox" type="text" placeholder="Search here..." />
+			<button class="middle red btn" id="searchbutton">
+				Get communism
+			</button>
+		</div>
+	</div>
+	<!-- Response size wrapper -->
+    <div id="responsesize" class="red-text center">
     </div>
-    <div id="responsesize">
-    </div>
-    <div id="urllist">
-    </div>
+	<!-- Results list wrapper -->
+	<div id="urllist">
+	</div>
+	<!-- Footer with link to github -->
+	<footer class="center">
+		<div class="link-text">
+			<a href="https://github.itu.dk/ivml/Group-C">Link to github</a>
+		</div>
+	</footer>
 </body>
 </html>

@@ -11,6 +11,7 @@ public class Website
 {
     private String url;
     private String title;
+    private String extract;
     private Map<String, Integer> termFrequencyMap;
     private int wordsCount;
 
@@ -21,7 +22,7 @@ public class Website
      * @param title     The title of the website.
      * @param termFrequencyMap  All keywords associated with the website.
      */
-    public Website(String url, String title, Map<String, Integer> termFrequencyMap, int wordCounter) throws MalformedURLException
+    public Website(String url, String title, String extract, Map<String, Integer> termFrequencyMap, int wordCounter) throws MalformedURLException
     {
         if (!url.startsWith("http://") && !url.startsWith("https://"))
         {
@@ -30,6 +31,7 @@ public class Website
 
         this.url = url;
         this.title = title;
+        this.extract = extract;
         this.termFrequencyMap = termFrequencyMap;
         this.wordsCount = wordCounter;
     }
@@ -76,5 +78,10 @@ public class Website
     public int getWordsCount()
     {
         return this.wordsCount;
+    }
+
+    public String getExtract()
+    {
+        return extract;
     }
 }
