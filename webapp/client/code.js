@@ -9,7 +9,7 @@ $(document).ready(function() {
 			return;
 		}
 		
-        console.log("Sending request to server.");
+        console.log("Sending request for \"" + input + "\" to server.");
 		var start = new Date();
         $.ajax({
             method: "GET",
