@@ -76,7 +76,8 @@ public class FileHelper
                     }
 
                     //Add the current line as a keyword (make sure it's all lower case)
-                    String lowerCaseWord = currentLine.toLowerCase();
+                    //Also, regular expression removes all non-alphanumeric characters (so only a-z and 0-9 characters are left)
+                    String lowerCaseWord = currentLine.replaceAll("[^a-zA-Z0-9']", "").toLowerCase();
 
                     //The amount of times the word is seen so far is calculated
                     int counter = 1;

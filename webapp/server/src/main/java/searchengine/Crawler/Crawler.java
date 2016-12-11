@@ -24,7 +24,7 @@ public class Crawler
 {
     private final String preURL = "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts%7Cinfo%7Clinks&titles=";
     private final String postURL = "&utf8=1&exlimit=max&exintro=1&explaintext=1&inprop=url&pllimit=max";
-    private final int maxWebsites = 50;
+    private final int maxWebsites = 20000;
     private final int maxWebsitesInOneRequest = 20;
     private final String finalFileName = "Data/final.txt";
 
@@ -43,8 +43,10 @@ public class Crawler
         titles = new ArrayDeque<>();
         titles.add("Communism");
 
-        crawledSites = new HashMap<>();
         writtenSites = new HashSet<>();
+        writtenSites.add("Communism");
+
+        crawledSites = new HashMap<>();
     }
 
     public void crawlerExe(List<String> titles, String continueStatement) throws MalformedURLException, UnsupportedEncodingException, InterruptedException {
@@ -183,6 +185,16 @@ public class Crawler
         {
             for (WikiJson.JsonWikiLinks link : site.links)
             {
+                if (link.title.startsWith("Category:") ||
+                    link.title.startsWith("Portal:") ||
+                    link.title.startsWith("Help:") ||
+                    link.title.startsWith("Template talk:") ||
+                    link.title.startsWith("File:") ||
+                    link.title.startsWith("Wikipedia:"))
+                {
+                    continue;
+                }
+
                 if (!writtenSites.contains(link.title))
                 {
                     titles.offer(link.title);
