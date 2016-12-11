@@ -1,4 +1,4 @@
-package searchengine;
+package searchengine.Crawler;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -24,7 +24,7 @@ public class WikiJson {
     public String fullurl;
 
     @JsonProperty("links")
-    public JsonWikiLinks[] links;
+    public List<JsonWikiLinks> links;
 
     public class JsonWikiLinks{
         @JsonProperty("title")
