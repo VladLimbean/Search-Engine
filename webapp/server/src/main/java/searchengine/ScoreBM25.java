@@ -19,6 +19,13 @@ public class ScoreBM25 implements Score
         this.inverseDocumentFrequency = 0;
     }
 
+    /**
+     * WRITE JAVA DOC
+     *
+     * @param query
+     * @param website Website that will have its score calculated.
+     * @return
+     */
     public double getScore(String query, Website website)
     {
         if (this.inverseDocumentFrequency == 0)
@@ -33,6 +40,12 @@ public class ScoreBM25 implements Score
         return bm25;
     }
 
+    /**
+     * WRITE JAVA DOC
+     *
+     * @param keyword
+     * @param numberOfResults
+     */
     @Override
     public void calculateInverseDocumentFrequency(String keyword, int numberOfResults)
     {
@@ -49,6 +62,13 @@ public class ScoreBM25 implements Score
                 Math.log10((double)numberOfWebsites / (double)numberOfResults) / this.logOfTwo;
     }
 
+    /**
+     * WRITE JAVA DOC
+     *
+     * @param query
+     * @param website
+     * @return
+     */
     public double termFrequencyStar(String query, Website website)
     {
         double termFrequency = website.getTermFrequency(query);
