@@ -55,7 +55,8 @@ public class QuerySplit
         Map<Website, Double> rankingMap = new HashMap<>();
 
         //Go though all strings that are split by the " OR " operator
-        for (String fullquery : splitByOr) {
+        for (String fullquery : splitByOr)
+        {
             //Split the substring by the whitespace operator
             String[] splitBySpace = fullquery.split(" ");
 
@@ -64,14 +65,15 @@ public class QuerySplit
             List<Website> partialResultsList = partialResults.getKey();
             int[] resultsCount = partialResults.getValue();
 
-            //Add all results in the final list, if they are not already there
-            for (Website w : partialResultsList)
-            {
-                //Calculate the ranking score of the website
-                double scoreForQuery = calculateSubqueryRanking(splitBySpace, w, resultsCount, rankingHandler);
+            //Calculate the total ranking score of all websites for the specific subquery
+            HashMap<Website, Double> websitesScore =
+                    calculateSubqueryRanking(splitBySpace, resultsCount, partialResultsList, rankingHandler);
 
+            //Iterate through the map
+            for (Map.Entry<Website, Double> website : websitesScore.entrySet())
+            {
                 //Update the ranking map based on the score that was just calculated
-                rankingMap = updateWebsiteInMap(w, scoreForQuery, rankingMap);
+                rankingMap = updateWebsiteInMap(website.getKey(), website.getValue(), rankingMap);
             }
         }
 
@@ -141,26 +143,45 @@ public class QuerySplit
      * Calculates the ranking of a specific website for a given query.
      *
      * @param splitByWhitespace A string array containing individual query words.
-     * @param website           Website to calculate the score for.
      * @param numberOfResults   Total amount of results found for the specific subquery.
+     * @param results           List of websites to calculate the score for.
      * @param rankingHandler    Score calculator object.
      *
-     * @return                  Returns the rank of a specific website relative to a search query.
+     * @return                  Returns the rank of all websites in the list relative to a search query.
      */
-    private static double calculateSubqueryRanking(String[] splitByWhitespace, Website website, int[] numberOfResults, Score rankingHandler) {
+    private static HashMap<Website, Double> calculateSubqueryRanking(String[] splitByWhitespace, int[] numberOfResults, List<Website> results, Score rankingHandler)
+    {
         //Initialize the score holder
-        double scoreForQuery = 0;
+        HashMap<Website, Double> scoresPerWebsite = new HashMap<>();
 
-        //Increment the score of the subquery for each string in it
+        //Iterate through all query words in the subquery
         for (int i = 0; i < splitByWhitespace.length; i++)
         {
+            //Remove capitalization
             String toLowerCase = splitByWhitespace[i].toLowerCase();
+
+            //Calculate the inverse document frequency of the word
             rankingHandler.calculateInverseDocumentFrequency(toLowerCase, numberOfResults[i]);
-            scoreForQuery += rankingHandler.getScore(toLowerCase, website);
+
+            for (Website website : results)
+            {
+                //Calculate the score of a website towards the query word
+                double scoreForQuery = rankingHandler.getScore(toLowerCase, website);
+
+                //If the website has a score already calculated for another query word...
+                if (scoresPerWebsite.containsKey(website))
+                {
+                    //...Get it and add it to the current score
+                    scoreForQuery += scoresPerWebsite.get(website);
+                }
+
+                //Update the total score of the website
+                scoresPerWebsite.put(website, scoreForQuery);
+            }
         }
 
         //Return the final score of the whole query
-        return scoreForQuery;
+        return scoresPerWebsite;
     }
 
     /**
