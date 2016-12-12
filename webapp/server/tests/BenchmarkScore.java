@@ -33,13 +33,11 @@ public class BenchmarkScore
         {
             List<Website> result = testIndex.lookup(word);
 
-
-            score.calculateInverseDocumentFrequency(word, result.size());
             for (Website w : result)
             {
                 for (int i = 0; i < testLoopsCount; i++)
                 {
-                    score.getScore(word, w);
+                    score.getScore(word, w, result.size());
                 }
             }
         }

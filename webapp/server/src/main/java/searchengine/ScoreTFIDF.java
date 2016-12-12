@@ -27,8 +27,9 @@ public class ScoreTFIDF implements Score
      * @param website   Website that will have its score calculated.
      * @return          Number value representing the Website score.
      */
-    public double getScore(String keyword, Website website)
+    public double getScore(String keyword, Website website, int numberOfResults)
     {
+        calculateInverseDocumentFrequency(keyword, numberOfResults);
         if (this.inverseDocumentFrequency == 0)
         {
             return 0;
@@ -50,8 +51,7 @@ public class ScoreTFIDF implements Score
      * @param keyword           Query word.
      * @param numberOfResults   A number representing the inverse document frequency of a word across all websites.
      */
-    @Override
-    public void calculateInverseDocumentFrequency(String keyword, int numberOfResults)
+    private void calculateInverseDocumentFrequency(String keyword, int numberOfResults)
     {
         //If the denominator is 0, the inverse document frequency cannot be calculated
         if (numberOfResults == 0)

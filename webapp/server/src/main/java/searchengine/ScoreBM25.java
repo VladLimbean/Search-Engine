@@ -27,8 +27,9 @@ public class ScoreBM25 implements Score
      *
      * @return        Number representing the website's score.
      */
-    public double getScore(String query, Website website)
+    public double getScore(String query, Website website, int numberOfResults)
     {
+        calculateInverseDocumentFrequency(query, numberOfResults);
         if (this.inverseDocumentFrequency == 0)
         {
             return 0;
@@ -47,8 +48,7 @@ public class ScoreBM25 implements Score
      * @param keyword           Query word.
      * @param numberOfResults   A number representing the inverse document frequency of a word across all websites.
      */
-    @Override
-    public void calculateInverseDocumentFrequency(String keyword, int numberOfResults)
+    private void calculateInverseDocumentFrequency(String keyword, int numberOfResults)
     {
         //If the denominator is 0, the inverse document frequency cannot be calculated
         if (numberOfResults == 0)

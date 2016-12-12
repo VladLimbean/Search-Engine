@@ -39,9 +39,8 @@ public class RankingTest
                 this.index.lookup("america");
         assertEquals(1, americaTest.size());
         assertEquals("United States", americaTest.get(0).getTitle());
-        this.rankingHandler.calculateInverseDocumentFrequency("america", americaTest.size());
         //Score for BM25
-        assertEquals(2.626865671641791, this.rankingHandler.getScore("america", americaTest.get(0)), 1e-15);
+        assertEquals(2.626865671641791, this.rankingHandler.getScore("america", americaTest.get(0), americaTest.size()), 1e-15);
         //Score for TFIDF
         //assertEquals(2, this.rankingHandler.getScore("america", americaTest.get(0)), 1e-15);
     }
@@ -51,10 +50,9 @@ public class RankingTest
     {
         List<Website> scandinaviaTest = this.index.lookup("scandinavia");
         assertEquals(2, scandinaviaTest.size());
-        this.rankingHandler.calculateInverseDocumentFrequency("scandinavia", scandinaviaTest.size());
         //Score for BM25
-        assertEquals(0.9128630705394192, this.rankingHandler.getScore("scandinavia", scandinaviaTest.get(0)), 1e-15);
-        assertEquals(1.8384401114206126, this.rankingHandler.getScore("scandinavia", scandinaviaTest.get(1)), 1e-15);
+        assertEquals(0.9128630705394192, this.rankingHandler.getScore("scandinavia", scandinaviaTest.get(0), scandinaviaTest.size()), 1e-15);
+        assertEquals(1.8384401114206126, this.rankingHandler.getScore("scandinavia", scandinaviaTest.get(1), scandinaviaTest.size()), 1e-15);
         //Score for TFIDF
         //assertEquals(2.626865671641791, this.rankingHandler.getScore("scandinavia", scandinaviaTest.get(0)), 1e-15);
         //assertEquals(2.626865671641791, this.rankingHandler.getScore("scandinavia", scandinaviaTest.get(1)), 1e-15);
@@ -70,15 +68,13 @@ public class RankingTest
         assertEquals("Scandinavia", queryTest.get(0).getTitle());
         assertEquals("Denmark", queryTest.get(1).getTitle());
 
-        this.rankingHandler.calculateInverseDocumentFrequency("scandinavia", index.lookup("scandinavia").size());
         //Score for BM25
-        assertEquals(1.8384401114206126, this.rankingHandler.getScore("scandinavia", queryTest.get(0)), 1e-15);
-        assertEquals(0.9128630705394192, this.rankingHandler.getScore("scandinavia", queryTest.get(1)), 1e-15);
+        assertEquals(1.8384401114206126, this.rankingHandler.getScore("scandinavia", queryTest.get(0), index.lookup("scandinavia").size()), 1e-15);
+        assertEquals(0.9128630705394192, this.rankingHandler.getScore("scandinavia", queryTest.get(1), index.lookup("scandinavia").size()), 1e-15);
 
-        this.rankingHandler.calculateInverseDocumentFrequency("europe", index.lookup("europe").size());
         //Score for BM25
-        assertEquals(0.7630215864179299, this.rankingHandler.getScore("scandinavia", queryTest.get(0)), 1e-15);
-        assertEquals(0.3788724059806873, this.rankingHandler.getScore("scandinavia", queryTest.get(1)), 1e-15);
+        assertEquals(0.7630215864179299, this.rankingHandler.getScore("scandinavia", queryTest.get(0), index.lookup("europe").size()), 1e-15);
+        assertEquals(0.3788724059806873, this.rankingHandler.getScore("scandinavia", queryTest.get(1), index.lookup("europe").size()), 1e-15);
     }
 
     @Test

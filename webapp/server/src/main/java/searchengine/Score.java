@@ -12,13 +12,5 @@ public interface Score
      * @param website Website that will have its score calculated.
      * @return        The score of the website for the given query.
      */
-    double getScore(String keyword, Website website);
-
-    /**
-     * Calculates the inverse document frequency of a given query word.
-     *
-     * @param keyword           Query word.
-     * @param numberOfResults   A number representing the inverse document frequency of a word across all websites.
-     */
-    void calculateInverseDocumentFrequency(String keyword, int numberOfResults);
+    double getScore(String keyword, Website website, int numberOfResults);
 }
