@@ -23,9 +23,9 @@ public class ScoreTFIDF implements Score
     /**
      * Computes the total score of a website relative to a query.
      *
-     * @param keyword Query word used to determine the list of websites to be scored.
-     * @param website Website that will have its score calculated.
-     * @return        Number value representing the Website score.
+     * @param keyword   Query word used to determine the list of websites to be scored.
+     * @param website   Website that will have its score calculated.
+     * @return          Number value representing the Website score.
      */
     public double getScore(String keyword, Website website)
     {
@@ -44,6 +44,12 @@ public class ScoreTFIDF implements Score
         return totalScore;
     }
 
+    /**
+     * Calculates the inverse document frequency of a given query word.
+     *
+     * @param keyword           Query word.
+     * @param numberOfResults   A number representing the inverse document frequency of a word across all websites.
+     */
     @Override
     public void calculateInverseDocumentFrequency(String keyword, int numberOfResults)
     {

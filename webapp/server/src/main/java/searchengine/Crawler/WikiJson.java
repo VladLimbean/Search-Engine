@@ -9,7 +9,7 @@ import java.net.URL;
 import java.util.List;
 
 /**
- * Stores one results from @class Crawler
+ * Stores data of a crawled websites.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WikiJson {

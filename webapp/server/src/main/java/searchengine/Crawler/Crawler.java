@@ -16,9 +16,10 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Initial crawler build -  Group-C
+ * Wikipedia website crawler used by the Group-C search engine.
  *
- * it's exception-tastic
+ * It makes use of the Wikipedia API sandbox (https://en.wikipedia.org/wiki/Special:ApiSandbox) in order to standardize
+ * the crawl path.
  */
 public class Crawler
 {
@@ -49,6 +50,15 @@ public class Crawler
         crawledSites = new HashMap<>();
     }
 
+    /**
+     * Establishes a connection with the Wikipedia pages containing a given list of titles.
+     *
+     * @param titles                            A list of titles of wikipedia pages.
+     * @param continueStatement                 ???
+     * @throws MalformedURLException            Exception thrown in case of unreadable URL.
+     * @throws UnsupportedEncodingException     ???
+     * @throws InterruptedException
+     */
     public void crawlerExe(List<String> titles, String continueStatement) throws MalformedURLException, UnsupportedEncodingException, InterruptedException {
         // wait gave us an IllegalMonitorException
         Thread.sleep(2000);
@@ -88,6 +98,15 @@ public class Crawler
         }
     }
 
+    /**
+     * Reads a json object, converts it to java readable code and stores the information in a hash map.
+     *
+     * @param result                        json object received from crawlerEXE.
+     * @throws FileNotFoundException        ???
+     * @throws MalformedURLException        ???
+     * @throws UnsupportedEncodingException ???
+     * @throws InterruptedException         ???
+     */
     public void wikiReader(String result) throws FileNotFoundException, MalformedURLException, UnsupportedEncodingException, InterruptedException {
         Gson jsonLoader = new Gson();
         JsonParser parser = new JsonParser();
@@ -155,6 +174,19 @@ public class Crawler
         }
     }
 
+    /**
+     * Prints the crawled websites into a .txt file in the format below:
+     *
+     * PAGE*:http://siteurl.com
+     * Title of page
+     * word1
+     * word2
+     * ...
+     * ...
+     * wordn
+     *
+     * @throws FileNotFoundException
+     */
     public void wikiWriter() throws FileNotFoundException
     {
         for (WikiJson wikiPage : crawledSites.values())
@@ -179,6 +211,9 @@ public class Crawler
         }
     }
 
+    /**
+     * Adds further links for the crawler ensuring the same page is not crawled more than once.
+     */
     private void addNewLinksToCrawl()
     {
         for (WikiJson site : crawledSites.values())
@@ -203,6 +238,13 @@ public class Crawler
         }
     }
 
+    /**
+     * Limits the number of websites to be crawled and updates the command line with the current status of the class.
+     *
+     * @throws MalformedURLException            ???
+     * @throws InterruptedException             ???
+     * @throws UnsupportedEncodingException     ???
+     */
     public void queueCrawler() throws MalformedURLException, InterruptedException, UnsupportedEncodingException
     {
         while (titles.size() > 0 && crawlCount < maxWebsites)
@@ -226,6 +268,14 @@ public class Crawler
         saveFile.close();
     }
 
+    /**
+     * Initiates the crawler.
+     *
+     * @param args                          the program does not take any command line arguments.
+     * @throws InterruptedException
+     * @throws UnsupportedEncodingException
+     * @throws FileNotFoundException
+     */
     public static void main(String[] args) throws InterruptedException, UnsupportedEncodingException, FileNotFoundException {
         Crawler jumboTurbo = new Crawler();
         try

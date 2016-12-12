@@ -29,10 +29,10 @@ public class SimpleIndex implements Index
     }
 
     /**
-     * Searches for a specific string in the built list of websites.
+     * Searches for a specific keyword / string in the list of websites.
      *
-     * @param query Phrase/word to look-up.
-     * @return A list of websites containing the query.
+     * @param query     Query word to look-up.
+     * @return          A list of websites containing which contain the query word.
      */
     public List<Website> lookup(String query)
     {
@@ -73,9 +73,9 @@ public class SimpleIndex implements Index
     }
 
     /**
-     * Calculates all words in the entire list of websites and provides the average
+     * Calculates the average number of words in the entire list of websites.
      *
-     * @return an integer representing average number of words relative to all websites
+     * @return an integer representing average number of words across all websites.
      */
     public double getAverageWordsCount()
     {

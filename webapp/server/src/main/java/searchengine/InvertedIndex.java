@@ -3,7 +3,7 @@ package searchengine;
 import java.util.*;
 
 /**
- * Adds all websites in a Map structure.
+ * Stores keywords all related websites in a Map structure.
  */
 public class InvertedIndex implements Index
 {
@@ -31,6 +31,11 @@ public class InvertedIndex implements Index
         this.websitesCount = 0;
     }
 
+    /**
+     * Creates the data structure that will index all websites.
+     *
+     * @param websites  Website list provided by FileHelper.
+     */
     public void build(List<Website> websites)
     {
         this.websitesCount = websites.size();
@@ -74,10 +79,10 @@ public class InvertedIndex implements Index
     }
 
     /**
-     * Searches for a phrase or words within the index and lists the websites it occurs.
+     * Searches for a phrase or words within the index and lists the websites it occurs in.
      *
-     * @param query Phrase/word to look-up.
-     * @return A list of websites containing the query.
+     * @param query     Query word to look-up.
+     * @return          A list of websites containing the query word.
      */
     public List<Website> lookup(String query)
     {
@@ -114,9 +119,9 @@ public class InvertedIndex implements Index
     }
 
     /**
-     * Calculates the average amount of words across all websites
+     * Calculates the average number of words across all websites in the index.
      *
-     * @return  double representation of the average number of words
+     * @return  double representation of the average number of words.
      */
     public double getAverageWordsCount(){
         return averageWordsCount;

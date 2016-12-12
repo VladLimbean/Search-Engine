@@ -19,8 +19,6 @@ import java.util.List;
 /**
  * The main class of our search engine program.
  *
- * @author Martin Aumüller
- * @author Leonid Rusnac
  */
 @Configuration
 @EnableAutoConfiguration

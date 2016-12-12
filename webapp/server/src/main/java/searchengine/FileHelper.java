@@ -13,8 +13,8 @@ public class FileHelper
     /**
      * Reads the .txt file and returns a list of websites.
      *
-     * @param arg path of the .txt file.
-     * @return A list of websites based on the contents of the .txt file.
+     * @param arg   The file path of the .txt file.
+     * @return      A list of websites based on the contents of the .txt file.
      */
     public static List<Website> parseFile(String arg)
     {
@@ -118,8 +118,8 @@ public class FileHelper
     /**
      * Checks if the current line in the .txt represents the website URL.
      *
-     * @param line The current line.
-     * @return True if the current line represents a website URL.
+     * @param line  The current line.
+     * @return      True if the current line represents a website URL.
      */
     private static boolean isLineURL(String line)
     {
@@ -129,8 +129,8 @@ public class FileHelper
     /**
      * Checks if the current line in the .txt file represents the title of the website.
      *
-     * @param title line in the .txt file to be checked.
-     * @return True if the current line represents the website title.
+     * @param title  The current line.
+     * @return       True if the current line represents the website title.
      */
     private static boolean isLineTitle(String title)
     {
@@ -138,12 +138,12 @@ public class FileHelper
     }
 
     /**
-     * Checks if a website can be created based on the values stored in URL, Title, and associated list of words.
+     * Checks if a website can be created based on the values stored in URL, Title and associated list of words.
      *
-     * @param url The current value of the URL variable.
-     * @param title The current value of the title variable.
-     * @param keywords The current value of the keywords list variable.
-     * @return True if a new website can be added.
+     * @param url       The current value of the URL variable.
+     * @param title     The current value of the title variable.
+     * @param keywords  The current value of the keywords list variable.
+     * @return          True if a new website can be added.
      */
     private static boolean canAddWebsite(String url, String title, Map<String, Integer> keywords)
     {

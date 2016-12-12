@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class QuerySplit
 {
     /**
-     * Searches for every word in complex query and returns all matching websites. The function will receive the user
+     * Searches for every word in complex query and returns all matching websites. The function will receive the user's
      * query and split it into subqueries taking into account the ' OR ' operator.
      *
      * For example, "President USA OR Queen Denmark" will be split into 'president USA' and 'queen denmark'.
@@ -43,10 +43,10 @@ public class QuerySplit
      * For example, the function receives 'president USA' and 'queen denmark' and will break these down to 'president',
      * 'USA', 'queen' and 'denmark'.
      *
-     * The results resulting from each individual query is ranked.
+     * The results from each individual query is ranked.
      *
      * @param splitByOr String array that holds all substrings without the " OR " operator.
-     * @param index     Index data structure used to hold the Websites and associated words.
+     * @param index     Index data structure used to hold the websites and associated words.
      * @return          A list of ranked websites.
      */
     private static List<Website> evaluateFullQuery(String[] splitByOr, Index index, Score rankingHandler)
@@ -142,7 +142,7 @@ public class QuerySplit
      *
      * @param splitByWhitespace A string array containing individual query words.
      * @param website           Website to calculate the score for.
-     * @param numberOfResults   Total amount of results found for the specific subquery
+     * @param numberOfResults   Total amount of results found for the specific subquery.
      * @param rankingHandler    Score calculator object.
      *
      * @return                  Returns the rank of a specific website relative to a search query.
