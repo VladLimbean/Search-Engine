@@ -2,10 +2,7 @@ package searchengine.Crawler;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.List;
 
 /**
