@@ -10,7 +10,7 @@ public interface Index
     /**
      * Creates the data structure that will index all websites.
      *
-     * @param websites Website list provided by FileHelper
+     * @param websites  Website list provided by FileHelper.
      */
     void build(List<Website> websites);
 
@@ -24,15 +24,14 @@ public interface Index
     /**
      * Calculates the total number of websites in the index.
      *
-     * @return The total number of websites.
+     * @return  Number representing the total number of websites.
      */
     int getSize();
 
     /**
-     * Calculates the average number of words across all websites held withing the index structure
+     * Calculates the average number of words across all websites held withing the index structure.
      *
-     * @return double representation of the average words across all websites
+     * @return  A double representation of the average words across all websites.
      */
     double getAverageWordsCount();
-
 }

@@ -13,12 +13,24 @@ import java.util.*;
 import java.util.regex.Pattern;
 
 /**
- * Initial crawler build -  Group-C
+ * Wikipedia website crawler used by the Group-C search engine.
  *
- * it's exception-tastic
+ * It makes use of the Wikipedia API (https://en.wikipedia.org/wiki/Special:ApiSandbox) in order to standardize
+ * the crawl path.
+ *
+ * The program saves the crawled websites in the same format as the original prototype .txt file.
+ *
+ * Format of .txt:
+ *
+ * PAGE*: HTTP://url.com
+ * Title
+ * word_1
+ * word_2
+ * ...
+ * word_n
+ *
  */
-public class Crawler
-{
+public class Crawler {
     private final String preURL = "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts%7Cinfo%7Clinks&titles=";
     private final String postURL = "&utf8=1&exlimit=max&exintro=1&explaintext=1&inprop=url&pllimit=max";
     private final int maxWebsites = 20000;
@@ -32,8 +44,7 @@ public class Crawler
     private PrintWriter saveFile;
 
 
-    public Crawler() throws FileNotFoundException
-    {
+    public Crawler() throws FileNotFoundException {
         File newFile = new File(finalFileName);
         saveFile = new PrintWriter(newFile);
 
@@ -46,6 +57,16 @@ public class Crawler
         partiallyCrawledSites = new HashMap<>();
     }
 
+    /**
+     * Establishes a connection with the Wikipedia pages containing a given list of titles. The method retrieves
+     * a response from the Wikipedia API.
+     *
+     * @param titles            A list of titles of wikipedia pages.
+     * @param continueStatement A url post-fix received a previous request to the wikipedia API
+     * @throws MalformedURLException        Exception thrown in case of unreadable URL.
+     * @throws UnsupportedEncodingException Exception thrown in case of an URL encoding issue.
+     * @throws InterruptedException         Exception thrown in case Thread.sleep is interrupted (during testing).
+     */
     public void crawlerExe(List<String> titles, String continueStatement) throws MalformedURLException, UnsupportedEncodingException, InterruptedException
     {
         // wait gave us an IllegalMonitorException
@@ -92,6 +113,15 @@ public class Crawler
         }
     }
 
+    /**
+     * Reads a json object, converts it to a java class (WikiJson) and stores the information in a hash map.
+     *
+     * @param result                            json object retrieved from the Wikipedia API via crawelerExe.
+     * @throws FileNotFoundException            Exception thrown in case a file cannot be open due to faulty path.
+     * @throws MalformedURLException            Exception thrown in case of unreadable URL.
+     * @throws UnsupportedEncodingException     Exception thrown in case of an URL encoding issue.
+     * @throws InterruptedException             Exception thrown in case Thread.sleep is interrupted (during testing).
+     */
     public void wikiReader(String result) throws FileNotFoundException, MalformedURLException, UnsupportedEncodingException, InterruptedException {
         Gson jsonLoader = new Gson();
         JsonParser parser = new JsonParser();
@@ -159,6 +189,21 @@ public class Crawler
         }
     }
 
+    /**
+     * Prints the crawled websites into a .txt file in the format below:
+     *
+     * Example:
+     *
+     * PAGE*:http://siteurl.com
+     * Title of page
+     * word_1
+     * word_2
+     * ...
+     * ...
+     * word_n
+     *
+     * @throws FileNotFoundException   Exception thrown in case a file cannot be open due to faulty path.
+     */
     public void wikiWriter() throws FileNotFoundException
     {
         for (WikiJson wikiPage : partiallyCrawledSites.values())
@@ -183,6 +228,9 @@ public class Crawler
         }
     }
 
+    /**
+     * Adds further links for the crawler, ensuring the same page is not crawled more than once.
+     */
     private void addTitlesToQueue()
     {
         for (WikiJson site : partiallyCrawledSites.values())
@@ -210,6 +258,13 @@ public class Crawler
         }
     }
 
+    /**
+     * Limits the number of websites to be crawled and updates the command line with the current status of the class.
+     *
+     * @throws InterruptedException             Exception thrown in case Thread.sleep is interrupted (during testing).
+     * @throws MalformedURLException            Exception thrown in case of unreadable URL.
+     * @throws UnsupportedEncodingException     Exception thrown in case of an URL encoding issue.
+     */
     public void queueCrawler() throws MalformedURLException, InterruptedException, UnsupportedEncodingException
     {
         while (titlesQueue.size() > 0 && crawlCount < maxWebsites)
@@ -233,6 +288,14 @@ public class Crawler
         saveFile.close();
     }
 
+    /**
+     * Initiates the crawler.
+     *
+     * @param args                              the program does not take any command line arguments.
+     * @throws InterruptedException             Exception thrown in case Thread.sleep is interrupted (during testing).
+     * @throws UnsupportedEncodingException     Exception thrown in case of an URL encoding issue.
+     * @throws FileNotFoundException            Exception thrown in case a file cannot be open due to faulty path.
+     */
     public static void main(String[] args) throws InterruptedException, UnsupportedEncodingException, FileNotFoundException {
         Crawler jumboTurbo = new Crawler();
         try

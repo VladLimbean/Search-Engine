@@ -1,7 +1,6 @@
 package searchengine;
 
 import java.net.MalformedURLException;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,8 +17,8 @@ public class Website
     /**
      * Constructor for creating new website objects.
      *
-     * @param url       The URL of the website.
-     * @param title     The title of the website.
+     * @param url               The URL of the website.
+     * @param title             The title of the website.
      * @param termFrequencyMap  All keywords associated with the website.
      */
     public Website(String url, String title, String extract, Map<String, Integer> termFrequencyMap, int wordCounter) throws MalformedURLException
@@ -65,6 +64,12 @@ public class Website
         return this.termFrequencyMap;
     }
 
+    /**
+     * Returns the term frequency of a query for the current website.
+     *
+     * @param word  Query word.
+     * @return      number representation of the query word's term frequency.
+     */
     public int getTermFrequency(String word)
     {
         if (this.termFrequencyMap.containsKey(word))
@@ -75,11 +80,21 @@ public class Website
         return 0;
     }
 
+    /**
+     * Returns the number of words in a website.
+     *
+     * @return A number representation of the amount of words in a website.
+     */
     public int getWordsCount()
     {
         return this.wordsCount;
     }
 
+    /**
+     * Returns website extract.
+     *
+     * @return String representation of the website extract.
+     */
     public String getExtract()
     {
         return extract;
