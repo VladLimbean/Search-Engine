@@ -10,13 +10,11 @@ public class ScoreBM25 implements Score
     private final double logOfTwo;
 
     private Index index;
-    private double inverseDocumentFrequency;
 
     public ScoreBM25(Index index)
     {
         this.logOfTwo = Math.log10(2);
         this.index = index;
-        this.inverseDocumentFrequency = 0;
     }
 
     /**
@@ -29,15 +27,10 @@ public class ScoreBM25 implements Score
      */
     public double getScore(String query, Website website, int numberOfResults)
     {
-        calculateInverseDocumentFrequency(query, numberOfResults);
-        if (this.inverseDocumentFrequency == 0)
-        {
-            return 0;
-        }
-
         double termFrequencyStar = termFrequencyStar(query, website);
+        double inverseDocumentFrequency = calculateInverseDocumentFrequency(query, numberOfResults);
 
-        double bm25 = termFrequencyStar * this.inverseDocumentFrequency;
+        double bm25 = termFrequencyStar * inverseDocumentFrequency;
 
         return bm25;
     }
@@ -48,19 +41,23 @@ public class ScoreBM25 implements Score
      * @param keyword           Query word.
      * @param numberOfResults   A number representing the inverse document frequency of a word across all websites.
      */
-    private void calculateInverseDocumentFrequency(String keyword, int numberOfResults)
+    private double calculateInverseDocumentFrequency(String keyword, int numberOfResults)
     {
         //If the denominator is 0, the inverse document frequency cannot be calculated
         if (numberOfResults == 0)
         {
-            this.inverseDocumentFrequency = 0;
+            return 0;
         }
 
         //Get the total number of websites
         int numberOfWebsites = index.getSize();
 
-        this.inverseDocumentFrequency =
+        //Calculate the inverse document frequency
+        double result =
                 Math.log10((double)numberOfWebsites / (double)numberOfResults) / this.logOfTwo;
+
+        //Return the final result
+        return result;
     }
 
     /**

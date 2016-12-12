@@ -7,7 +7,7 @@ package searchengine;
 public class ScoreTFIDF implements Score
 {
     private Index index;
-    private double inverseDocumentFrequency;
+    private final double logOfTwo;
 
     /**
      * Constructor stores index data structure.
@@ -17,7 +17,7 @@ public class ScoreTFIDF implements Score
     public ScoreTFIDF(Index indexToUse)
     {
         this.index = indexToUse;
-        this.inverseDocumentFrequency = 0;
+        this.logOfTwo = Math.log10(2);
     }
 
     /**
@@ -29,17 +29,12 @@ public class ScoreTFIDF implements Score
      */
     public double getScore(String keyword, Website website, int numberOfResults)
     {
-        calculateInverseDocumentFrequency(keyword, numberOfResults);
-        if (this.inverseDocumentFrequency == 0)
-        {
-            return 0;
-        }
-
-        //Calculate the two different
+        //Calculate the term frequency and the inverse document frequency
         double termFrequency = website.getTermFrequency(keyword);
+        double inverseDocumentFrequency = calculateInverseDocumentFrequency(keyword, numberOfResults);
 
         //Multiply them to get the final score of the website
-        double totalScore = termFrequency * this.inverseDocumentFrequency;
+        double totalScore = termFrequency * inverseDocumentFrequency;
 
         //Return the final score
         return totalScore;
@@ -51,18 +46,20 @@ public class ScoreTFIDF implements Score
      * @param keyword           Query word.
      * @param numberOfResults   A number representing the inverse document frequency of a word across all websites.
      */
-    private void calculateInverseDocumentFrequency(String keyword, int numberOfResults)
+    private double calculateInverseDocumentFrequency(String keyword, int numberOfResults)
     {
         //If the denominator is 0, the inverse document frequency cannot be calculated
         if (numberOfResults == 0)
         {
-            this.inverseDocumentFrequency = 0;
+            return 0;
         }
 
         //Get the total number of websites
         int numberOfWebsites = index.getSize();
 
-        this.inverseDocumentFrequency =
-                Math.log10((double)numberOfWebsites / (double)numberOfResults) / Math.log10(2);
+        //Calculate the inverse document frequency
+        double inverseDocumentFrequency =
+                Math.log10((double)numberOfWebsites / (double)numberOfResults) / this.logOfTwo;
+        return inverseDocumentFrequency;
     }
 }
