@@ -17,6 +17,7 @@ h1 {
 
 img {
 	margin: 5rem 0 0 0;
+	width: 100%;
 }
 
 h3 {
@@ -43,6 +44,7 @@ h3 {
 }
 
 input[type=text] {
+	font-family: "Roboto" sans-serif;
     display: inline-block;
     border: none;
     border-bottom: 1px solid #9e9e9e;
@@ -50,7 +52,7 @@ input[type=text] {
     height: 3rem;
     width: 100%;
     margin: 0 0 20px 0;
-	min-width: 200px;
+	min-width: 160px;
 	font: inherit;
     user-select: text;
     cursor: auto;

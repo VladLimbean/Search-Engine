@@ -23,19 +23,19 @@ public class BenchmarkIndex
         simpleIndex.build(websites);
         testLookup(simpleIndex);
 
-        //Create the Inverted Index with a HashMap
-        Index invertedIndexHash = new InvertedIndex(true);
-        //Test the Inverted Index
-        //testBuild(invertedIndexHash, websites);
-        invertedIndexHash.build(websites);
-        testLookup(invertedIndexHash);
-
         //Create the Inverted Index with a TreeMap
         Index invertedIndexTree = new InvertedIndex(false);
         //Test the Inverted Index
         //testBuild(invertedIndexTree, websites);
         invertedIndexTree.build(websites);
         testLookup(invertedIndexTree);
+
+        //Create the Inverted Index with a HashMap
+        Index invertedIndexHash = new InvertedIndex(true);
+        //Test the Inverted Index
+        //testBuild(invertedIndexHash, websites);
+        invertedIndexHash.build(websites);
+        testLookup(invertedIndexHash);
     }
 
     private static void testBuild(Index indexToTest, List<Website> listOfWebsites)
@@ -82,8 +82,6 @@ public class BenchmarkIndex
         //Save the time when the test starts
         long startTime = System.nanoTime();
 
-        int totalResults = 0;
-
         //Test the lookup for a range of words by going through them
         for (String word : testQueries)
         {
@@ -91,9 +89,6 @@ public class BenchmarkIndex
             {
                 //Execute the lookup function
                 List<Website> results = indexToTest.lookup(word);
-
-                //Log the total results count
-                totalResults += results.size();
             }
         }
 
@@ -105,10 +100,9 @@ public class BenchmarkIndex
 
         //Print the result
         System.out.printf(
-                "Average lookup time for %s after running %s times is %s nanoseconds. Total results are %s \n",
+                "Average lookup time for %s after running %s times is %s nanoseconds.\n",
                 indexToTest.toString(),
                 testLoopsCount,
-                averageTime,
-                totalResults);
+                averageTime);
     }
 }

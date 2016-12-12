@@ -89,8 +89,7 @@ public class SearchEngine extends ResourceConfig
 
         if (query == null || query.isEmpty())
         {
-            SearchResultsHolder empty = new SearchResultsHolder(0, new ArrayList<>());
-            return gson.toJson(empty);
+            return gson.toJson(new ArrayList<Website>());
         }
 
         System.out.println("Handling request for query word \"" + query + "\"");
@@ -100,11 +99,9 @@ public class SearchEngine extends ResourceConfig
         List<Website> resultList = QuerySplit.getMatchingWebsites(query, index, rankingHandler);
         long searchTime = System.nanoTime() - startTime;
 
-        SearchResultsHolder results = new SearchResultsHolder(searchTime, resultList);
-
         System.out.printf("Found %s results in %s ns \n", resultList.size(), searchTime);
 
         //Return the final list
-        return gson.toJson(results);
+        return gson.toJson(resultList);
     }
 }
