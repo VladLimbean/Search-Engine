@@ -10,6 +10,8 @@ import java.util.*;
  */
 public class FileHelper
 {
+    private static final int extractLength = 300;
+
     /**
      * Reads the .txt file and returns a list of websites.
      *
@@ -69,7 +71,7 @@ public class FileHelper
                 {
                     //This line is a keyword, because both URL and title are already set
 
-                    if (extract.length() < 180)
+                    if (extract.length() < extractLength)
                     {
                         extract.append(currentLine);
                         extract.append(" ");
@@ -78,6 +80,10 @@ public class FileHelper
                     //Add the current line as a keyword (make sure it's all lower case)
                     //Also, regular expression removes all non-alphanumeric characters (so only a-z and 0-9 characters are left)
                     String lowerCaseWord = currentLine.replaceAll("[^a-zA-Z0-9']", "").toLowerCase();
+                    if (lowerCaseWord.isEmpty())
+                    {
+                        continue;
+                    }
 
                     //The amount of times the word is seen so far is calculated
                     int counter = 1;

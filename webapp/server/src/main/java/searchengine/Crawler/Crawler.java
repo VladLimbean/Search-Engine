@@ -7,11 +7,8 @@ import com.google.gson.JsonParser;
 
 import java.io.*;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 
-import java.net.URLEncoder;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -26,11 +23,11 @@ public class Crawler
     private final String postURL = "&utf8=1&exlimit=max&exintro=1&explaintext=1&inprop=url&pllimit=max";
     private final int maxWebsites = 20000;
     private final int maxWebsitesInOneRequest = 20;
-    private final String finalFileName = "Data/final.txt";
+    private final String finalFileName = "Data/crawled-medium.txt";
 
-    private Map<String, WikiJson> crawledSites;
-    private Set<String> writtenSites;
-    private Queue<String> titles;
+    private Map<String, WikiJson> partiallyCrawledSites;
+    private Set<String> sitesToCrawl;
+    private Queue<String> titlesQueue;
     private int crawlCount = 0;
     private PrintWriter saveFile;
 
@@ -40,16 +37,17 @@ public class Crawler
         File newFile = new File(finalFileName);
         saveFile = new PrintWriter(newFile);
 
-        titles = new ArrayDeque<>();
-        titles.add("Communism");
+        titlesQueue = new ArrayDeque<>();
+        titlesQueue.add("Communism");
 
-        writtenSites = new HashSet<>();
-        writtenSites.add("Communism");
+        sitesToCrawl = new HashSet<>();
+        sitesToCrawl.add("Communism");
 
-        crawledSites = new HashMap<>();
+        partiallyCrawledSites = new HashMap<>();
     }
 
-    public void crawlerExe(List<String> titles, String continueStatement) throws MalformedURLException, UnsupportedEncodingException, InterruptedException {
+    public void crawlerExe(List<String> titles, String continueStatement) throws MalformedURLException, UnsupportedEncodingException, InterruptedException
+    {
         // wait gave us an IllegalMonitorException
         Thread.sleep(2000);
 
@@ -82,6 +80,12 @@ public class Crawler
 
             wikiReader(result);
         }
+        catch (UnknownHostException uhe)
+        {
+            uhe.printStackTrace();
+            //Try again
+            crawlerExe(titles, continueStatement);
+        }
         catch (IOException e)
         {
             e.printStackTrace();
@@ -96,7 +100,7 @@ public class Crawler
         if (!firstParse.has("query"))
         {
             wikiWriter();
-            addNewLinksToCrawl();
+            addTitlesToQueue();
             return;
         }
 
@@ -116,9 +120,9 @@ public class Crawler
         for(Map.Entry<String, JsonElement> currentLine : jsonObject.entrySet())
         {
             WikiJson wikiPage = jsonLoader.fromJson(currentLine.getValue(), WikiJson.class);
-            if (crawledSites.containsKey(wikiPage.title))
+            if (partiallyCrawledSites.containsKey(wikiPage.title))
             {
-                WikiJson savedSite = crawledSites.get(wikiPage.title);
+                WikiJson savedSite = partiallyCrawledSites.get(wikiPage.title);
                 if (savedSite.extract == null && wikiPage.extract != null)
                 {
                     savedSite.extract = wikiPage.extract;
@@ -134,30 +138,30 @@ public class Crawler
                     savedSite.links.addAll(wikiPage.links);
                 }
 
-                crawledSites.put(savedSite.title, savedSite);
+                partiallyCrawledSites.put(savedSite.title, savedSite);
             }
             else
             {
-                crawledSites.put(wikiPage.title, wikiPage);
+                partiallyCrawledSites.put(wikiPage.title, wikiPage);
             }
         }
 
         if (continueStatement.isEmpty())
         {
             wikiWriter();
-            addNewLinksToCrawl();
+            addTitlesToQueue();
         }
         else
         {
             String finalContinueStatement = "&plcontinue=" + URLEncoder.encode(continueStatement, "UTF-8");
-            List<String> sites = new ArrayList<>(crawledSites.keySet());
+            List<String> sites = new ArrayList<>(partiallyCrawledSites.keySet());
             crawlerExe(sites, finalContinueStatement);
         }
     }
 
     public void wikiWriter() throws FileNotFoundException
     {
-        for (WikiJson wikiPage : crawledSites.values())
+        for (WikiJson wikiPage : partiallyCrawledSites.values())
         {
             if (wikiPage.extract == null || wikiPage.extract.isEmpty())
             {
@@ -179,9 +183,9 @@ public class Crawler
         }
     }
 
-    private void addNewLinksToCrawl()
+    private void addTitlesToQueue()
     {
-        for (WikiJson site : crawledSites.values())
+        for (WikiJson site : partiallyCrawledSites.values())
         {
             for (WikiJson.JsonWikiLinks link : site.links)
             {
@@ -189,15 +193,18 @@ public class Crawler
                     link.title.startsWith("Portal:") ||
                     link.title.startsWith("Help:") ||
                     link.title.startsWith("Template talk:") ||
+                    link.title.startsWith("Template:") ||
                     link.title.startsWith("File:") ||
-                    link.title.startsWith("Wikipedia:"))
+                    link.title.startsWith("Wikipedia:") ||
+                    link.title.contains("(disambiguation)"))
                 {
                     continue;
                 }
 
-                if (!writtenSites.contains(link.title))
+                if (!sitesToCrawl.contains(link.title))
                 {
-                    titles.offer(link.title);
+                    sitesToCrawl.add(link.title);
+                    titlesQueue.offer(link.title);
                 }
             }
         }
@@ -205,18 +212,18 @@ public class Crawler
 
     public void queueCrawler() throws MalformedURLException, InterruptedException, UnsupportedEncodingException
     {
-        while (titles.size() > 0 && crawlCount < maxWebsites)
+        while (titlesQueue.size() > 0 && crawlCount < maxWebsites)
         {
             List<String> titlesToCrawlTogether = new ArrayList<>();
 
-            while (titles.size() > 0 && titlesToCrawlTogether.size() < maxWebsitesInOneRequest && crawlCount < maxWebsites)
+            while (titlesQueue.size() > 0 && titlesToCrawlTogether.size() < maxWebsitesInOneRequest && crawlCount < maxWebsites)
             {
-                String currentTitle = titles.poll();
+                String currentTitle = titlesQueue.poll();
                 System.out.println("Adding new title: " + currentTitle);
                 titlesToCrawlTogether.add(currentTitle);
                 crawlCount++;
             }
-            crawledSites.clear();
+            partiallyCrawledSites.clear();
             crawlerExe(titlesToCrawlTogether, "");
 
             System.out.println(crawlCount + " communist websites crawled.");

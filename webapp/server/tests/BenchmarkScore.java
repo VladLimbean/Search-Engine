@@ -28,13 +28,11 @@ public class BenchmarkScore
 
     public static void runBenchmark(Index testIndex, Score score)
     {
-        long totalTime = 0;
-
+        long startTime = System.nanoTime();
         for (String word : testQuery)
         {
             List<Website> result = testIndex.lookup(word);
 
-            long startTime = System.nanoTime();
 
             score.calculateInverseDocumentFrequency(word, result.size());
             for (Website w : result)
@@ -43,14 +41,16 @@ public class BenchmarkScore
                 {
                     score.getScore(word, w);
                 }
-                long endTime = System.nanoTime();
-
-                totalTime += (endTime-startTime)/testLoopsCount;
             }
         }
+
+        long totalTime = System.nanoTime() - startTime;
+
+        totalTime = totalTime / (testLoopsCount * testQuery.length);
+
         System.out.printf(
                 "Average time for %s is %s ns\n",
                 score.getClass(),
-                totalTime/testQuery.length);
+                totalTime);
     }
 }
