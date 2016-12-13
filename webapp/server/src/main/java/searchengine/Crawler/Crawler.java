@@ -43,8 +43,8 @@ public class Crawler {
     private int crawlCount = 0;
     private PrintWriter saveFile;
 
-
-    public Crawler() throws FileNotFoundException {
+    public Crawler() throws FileNotFoundException
+    {
         File newFile = new File(finalFileName);
         saveFile = new PrintWriter(newFile);
 
@@ -70,7 +70,7 @@ public class Crawler {
     public void crawlerExe(List<String> titles, String continueStatement) throws MalformedURLException, UnsupportedEncodingException, InterruptedException
     {
         // wait gave us an IllegalMonitorException
-        Thread.sleep(2000);
+        Thread.sleep(500);
 
         StringBuilder allTitlesString = new StringBuilder();
         for (int i = 0; i < titles.size(); i++)
@@ -81,6 +81,7 @@ public class Crawler {
                 allTitlesString.append("|");
             }
         }
+        System.out.println("Sending request for " + allTitlesString.toString());
 
         //Encode the title (because URL's shouldn't have whitespace and other symbols
         String titlesURL = URLEncoder.encode(allTitlesString.toString(), "UTF-8");
@@ -99,7 +100,7 @@ public class Crawler {
 
             String result = sc.useDelimiter(Pattern.compile("\\A")).next();
 
-            wikiReader(result);
+            wikiReader(result, titles);
         }
         catch (UnknownHostException uhe)
         {
@@ -117,20 +118,18 @@ public class Crawler {
      * Reads a json object, converts it to a java class (WikiJson) and stores the information in a hash map.
      *
      * @param result                            json object retrieved from the Wikipedia API via crawelerExe.
-     * @throws FileNotFoundException            Exception thrown in case a file cannot be open due to faulty path.
      * @throws MalformedURLException            Exception thrown in case of unreadable URL.
      * @throws UnsupportedEncodingException     Exception thrown in case of an URL encoding issue.
      * @throws InterruptedException             Exception thrown in case Thread.sleep is interrupted (during testing).
      */
-    public void wikiReader(String result) throws FileNotFoundException, MalformedURLException, UnsupportedEncodingException, InterruptedException {
+    public void wikiReader(String result, List<String> sitesWhenContinuing) throws UnsupportedEncodingException, MalformedURLException, InterruptedException
+    {
         Gson jsonLoader = new Gson();
         JsonParser parser = new JsonParser();
         JsonObject firstParse = parser.parse(result).getAsJsonObject();
 
         if (!firstParse.has("query"))
         {
-            wikiWriter();
-            addTitlesToQueue();
             return;
         }
 
@@ -150,6 +149,7 @@ public class Crawler {
         for(Map.Entry<String, JsonElement> currentLine : jsonObject.entrySet())
         {
             WikiJson wikiPage = jsonLoader.fromJson(currentLine.getValue(), WikiJson.class);
+
             if (partiallyCrawledSites.containsKey(wikiPage.title))
             {
                 WikiJson savedSite = partiallyCrawledSites.get(wikiPage.title);
@@ -176,16 +176,10 @@ public class Crawler {
             }
         }
 
-        if (continueStatement.isEmpty())
-        {
-            wikiWriter();
-            addTitlesToQueue();
-        }
-        else
+        if (!continueStatement.isEmpty())
         {
             String finalContinueStatement = "&plcontinue=" + URLEncoder.encode(continueStatement, "UTF-8");
-            List<String> sites = new ArrayList<>(partiallyCrawledSites.keySet());
-            crawlerExe(sites, finalContinueStatement);
+            crawlerExe(sitesWhenContinuing, finalContinueStatement);
         }
     }
 
@@ -208,24 +202,29 @@ public class Crawler {
     {
         for (WikiJson wikiPage : partiallyCrawledSites.values())
         {
+            System.out.println("Printing page in txt file: " + wikiPage.title);
+
             if (wikiPage.extract == null || wikiPage.extract.isEmpty())
             {
-                return;
+                System.out.println("Article with title " + wikiPage.title + " has no extract");
+                crawlCount--;
+                continue;
             }
 
             saveFile.println("*PAGE:" + wikiPage.fullurl);
             saveFile.println(wikiPage.title);
 
-            //regular expression which tells split to only takes alphanumeric characters
-            String[] extractWords = wikiPage.extract.split(" ");//.split("[^a-zA-Z0-9']");
+            String[] extractWords = wikiPage.extract.split(" ");
             for (String currentWord : extractWords)
             {
-                if (!currentWord.isEmpty())
+                if (!currentWord.isEmpty() && !currentWord.equals("\n"))
                 {
                     saveFile.println(currentWord);
                 }
             }
         }
+        
+        saveFile.flush();
     }
 
     /**
@@ -244,7 +243,8 @@ public class Crawler {
                     link.title.startsWith("Template:") ||
                     link.title.startsWith("File:") ||
                     link.title.startsWith("Wikipedia:") ||
-                    link.title.contains("(disambiguation)"))
+                    link.title.contains("(disambiguation)") ||
+                    link.title.startsWith("List of"))
                 {
                     continue;
                 }
@@ -265,8 +265,7 @@ public class Crawler {
      * @throws MalformedURLException            Exception thrown in case of unreadable URL.
      * @throws UnsupportedEncodingException     Exception thrown in case of an URL encoding issue.
      */
-    public void queueCrawler() throws MalformedURLException, InterruptedException, UnsupportedEncodingException
-    {
+    public void queueCrawler() throws MalformedURLException, InterruptedException, UnsupportedEncodingException, FileNotFoundException {
         while (titlesQueue.size() > 0 && crawlCount < maxWebsites)
         {
             List<String> titlesToCrawlTogether = new ArrayList<>();
@@ -281,7 +280,11 @@ public class Crawler {
             partiallyCrawledSites.clear();
             crawlerExe(titlesToCrawlTogether, "");
 
-            System.out.println(crawlCount + " communist websites crawled.");
+            //After all requests for the 20 titles finish, write them to a file
+            wikiWriter();
+            addTitlesToQueue();
+
+            System.out.println(crawlCount + " communist websites crawled and printed to text file.");
         }
 
         // because it needs to close the file at the end of the crawl
@@ -296,16 +299,9 @@ public class Crawler {
      * @throws UnsupportedEncodingException     Exception thrown in case of an URL encoding issue.
      * @throws FileNotFoundException            Exception thrown in case a file cannot be open due to faulty path.
      */
-    public static void main(String[] args) throws InterruptedException, UnsupportedEncodingException, FileNotFoundException {
+    public static void main(String[] args) throws InterruptedException, UnsupportedEncodingException, FileNotFoundException, MalformedURLException {
         Crawler jumboTurbo = new Crawler();
-        try
-        {
-            // poll takes the first element of the queue hands it over then removes it.
-            jumboTurbo.queueCrawler();
-        }
-        catch (MalformedURLException e)
-        {
-            e.printStackTrace();
-        }
+        // poll takes the first element of the queue hands it over then removes it.
+        jumboTurbo.queueCrawler();
     }
 }
