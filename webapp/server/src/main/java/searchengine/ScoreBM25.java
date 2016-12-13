@@ -27,9 +27,12 @@ public class ScoreBM25 implements Score
      */
     public double getScore(String query, Website website, int numberOfResults)
     {
+        //Calculate the term frequency star
         double termFrequencyStar = termFrequencyStar(query, website);
+        //Calculate the inverse document frequency
         double inverseDocumentFrequency = calculateInverseDocumentFrequency(query, numberOfResults);
 
+        //Multiply the two
         double bm25 = termFrequencyStar * inverseDocumentFrequency;
 
         return bm25;
@@ -70,11 +73,16 @@ public class ScoreBM25 implements Score
      */
     public double termFrequencyStar(String query, Website website)
     {
+        //Get the term frequency
         double termFrequency = website.getTermFrequency(query);
+
+        //Calculate the weight of the websites' words in the equation
         double words = website.getWordsCount()/index.getAverageWordsCount();
 
+        //Calculate the denominator
         double div = kMultiplier * (1 - bMultiplier + (bMultiplier * words)) + termFrequency;
 
+        //Calculate the final result
         double result = termFrequency * (kMultiplier + 1) / div;
 
         return result;

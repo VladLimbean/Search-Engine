@@ -110,4 +110,14 @@ public class QuerySplitTest
         List<Website> results = QuerySplit.getMatchingWebsites("     OR           ", this.indexToTest, this.rankingHandler);
         assertEquals(0, results.size());
     }
+
+    @Test
+    public void testComplexQueryManyOROperators() throws Exception
+    {
+        List<Website> results = QuerySplit.getMatchingWebsites("denmark OR scandinavia OR america OR scandinavia denmark", this.indexToTest, this.rankingHandler);
+        assertEquals(3, results.size());
+        assertEquals("Denmark", results.get(0).getTitle());
+        assertEquals("Scandinavia", results.get(1).getTitle());
+        assertEquals("United States", results.get(2).getTitle());
+    }
 }
