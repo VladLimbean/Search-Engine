@@ -67,7 +67,7 @@ public class Crawler {
      * @throws UnsupportedEncodingException Exception thrown in case of an URL encoding issue.
      * @throws InterruptedException         Exception thrown in case Thread.sleep is interrupted (during testing).
      */
-    public void crawlerExe(List<String> titles, String continueStatement) throws MalformedURLException, UnsupportedEncodingException, InterruptedException
+    public void requestMaker(List<String> titles, String continueStatement) throws MalformedURLException, UnsupportedEncodingException, InterruptedException
     {
         // wait gave us an IllegalMonitorException
         Thread.sleep(500);
@@ -106,7 +106,7 @@ public class Crawler {
         {
             uhe.printStackTrace();
             //Try again
-            crawlerExe(titles, continueStatement);
+            requestMaker(titles, continueStatement);
         }
         catch (IOException e)
         {
@@ -179,7 +179,7 @@ public class Crawler {
         if (!continueStatement.isEmpty())
         {
             String finalContinueStatement = "&plcontinue=" + URLEncoder.encode(continueStatement, "UTF-8");
-            crawlerExe(sitesWhenContinuing, finalContinueStatement);
+            requestMaker(sitesWhenContinuing, finalContinueStatement);
         }
     }
 
@@ -278,7 +278,7 @@ public class Crawler {
                 crawlCount++;
             }
             partiallyCrawledSites.clear();
-            crawlerExe(titlesToCrawlTogether, "");
+            requestMaker(titlesToCrawlTogether, "");
 
             //After all requests for the 20 titles finish, write them to a file
             wikiWriter();
